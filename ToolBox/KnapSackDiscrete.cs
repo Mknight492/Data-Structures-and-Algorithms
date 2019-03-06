@@ -44,7 +44,7 @@ namespace Addition
         }
 
 
-        static void Main(string[] args)
+       // static void Main(string[] args)
         //{
 
         //    var MaxWeight = Array.ConvertAll(Console.ReadLine().Split(' '), c => Convert.ToInt64(c)).ToArray()[0];
