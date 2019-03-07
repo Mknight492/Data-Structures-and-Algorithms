@@ -2,16 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace Addition
+namespace Addition.DataStructures
 {
-
-
-    class Program
+    class ComputeTreeHeight
     {
-
         public class Node
         {
             public int value { get; set; }
@@ -22,9 +18,9 @@ namespace Addition
         public static long MaxDepth(Node node)
         {
             var counter = 0;
- 
-           
-            while(node.Nodes.Count == 1)
+
+
+            while (node.Nodes.Count == 1)
             {
                 counter++;
                 node = node.Nodes[0];
@@ -36,7 +32,7 @@ namespace Addition
             else
             {
                 var lengths = new long[node.Nodes.Count];
-                for(var i =0; i < node.Nodes.Count; i++)
+                for (var i = 0; i < node.Nodes.Count; i++)
                 {
                     lengths[i] = MaxDepth(node.Nodes[i]);
                 }
@@ -49,13 +45,13 @@ namespace Addition
             var NodeArray = new Node[nodes.Length];
             Node Root = new Node();
             //initialise the tree
-            for (var i= 0; i<nodes.Length; i++)
+            for (var i = 0; i < nodes.Length; i++)
             {
                 NodeArray[i] = new Node();
             }
             for (var i = 0; i < nodes.Length; i++)
             {
-                if(nodes[i] == -1)
+                if (nodes[i] == -1)
                 {
                     Root = NodeArray[i];
                 }
@@ -69,19 +65,13 @@ namespace Addition
         }
 
 
-        static void Main(string[] args)
-        {
-            var number = Console.ReadLine();
-            var nodes = Array.ConvertAll(Console.ReadLine().Split(' '), c => Convert.ToInt64(c));
+        //static void Main(string[] args)
+        //{
+        //    var number = Console.ReadLine();
+        //    var nodes = Array.ConvertAll(Console.ReadLine().Split(' '), c => Convert.ToInt64(c));
 
-            var res = MaxTreeDepth(nodes);
-            Console.WriteLine(res +1);
-
-
-        }
+        //    var res = MaxTreeDepth(nodes);
+        //    Console.WriteLine(res + 1);
+        //}
     }
 }
-
-
-
-
