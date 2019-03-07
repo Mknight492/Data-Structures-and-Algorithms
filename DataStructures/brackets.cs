@@ -7,9 +7,10 @@ using System.Threading.Tasks;
 
 namespace Addition
 {
-    class Program
+    class Brackets
     {
-        public class Node{
+        public class Node
+        {
             public char value { get; set; }
             public int position { get; set; }
             public Node Next { get; set; }
@@ -26,10 +27,11 @@ namespace Addition
 
             public void Push(char c, int position)
             {
-                var newNode = new Node {
+                var newNode = new Node
+                {
                     value = c,
                     position = position
-                    
+
                 };
                 if (Head.Next == null)
                 {
@@ -47,7 +49,7 @@ namespace Addition
 
             public Node Pop()
             {
-                if(Head.Next == null)
+                if (Head.Next == null)
                 {
                     throw new Exception();
 
@@ -55,7 +57,7 @@ namespace Addition
                 else
                 {
                     var returnNode = Head.Next;
-          
+
                     var temp = new Node
                     {
                         Next = Head.Next.Next
@@ -83,23 +85,23 @@ namespace Addition
 
             var lastBracketPositon = -1;
 
-            for(var i=0; i<brackets.Length; i++)
+            for (var i = 0; i < brackets.Length; i++)
             {
-                if(brackets[i] == '{' || brackets[i] == '[' || brackets[i] == '(')
+                if (brackets[i] == '{' || brackets[i] == '[' || brackets[i] == '(')
                 {
                     myStack.Push(brackets[i], i);
                     lastBracketPositon = i;
 
                 }
-                else if(brackets[i] == '}' || brackets[i] == ']' || brackets[i] == ')')
+                else if (brackets[i] == '}' || brackets[i] == ']' || brackets[i] == ')')
                 {
                     if (myStack.Empty())
                     {
-                        return (i+1).ToString();
+                        return (i + 1).ToString();
                     }
 
                     var stackNode = myStack.Pop();
-                    
+
 
                     switch (brackets[i])
                     {
@@ -113,29 +115,23 @@ namespace Addition
                             if (stackNode.value != '(') return (i + 1).ToString();
                             break;
                     }
-                    
+
                 }
             }
             if (myStack.Empty() || lastBracketPositon == -1)
             {
                 return "Success";
             }
-            return ((myStack.Pop().position +1).ToString());
+            return ((myStack.Pop().position + 1).ToString());
         }
 
 
 
-        static void Main(string[] args)
-        {
-
-
-            var brackets = Console.ReadLine().ToCharArray();
-
-
-            var res = CheckBrackets(brackets);
-            Console.WriteLine(res);
-
-
-        }
+        //static void Main(string[] args)
+        //{
+        //    var brackets = Console.ReadLine().ToCharArray();
+        //    var res = CheckBrackets(brackets);
+        //    Console.WriteLine(res);
+        //}
     }
 }
