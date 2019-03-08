@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="DataStructures\brackets.cs" />
     <Compile Include="DataStructures\ComputeTreeHeight.cs" />
+    <Compile Include="DataStructures\MakeHeap.cs" />
     <Compile Include="ToolBox\ArithmeticOperation.cs" />
     <Compile Include="ToolBox\KnapSackDiscrete.cs" />
     <Compile Include="ToolBox\minSubString.cs" />
