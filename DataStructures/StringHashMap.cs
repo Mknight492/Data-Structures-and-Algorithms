@@ -2,6 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
@@ -9,7 +15,7 @@ namespace Addition
 {
 
 
-    class Program
+    class StringHashMap
     {
         public class Contact
         {
@@ -19,7 +25,7 @@ namespace Addition
 
         public class HashMap
         {
-            private List<string>[] hashMap ; 
+            private List<string>[] hashMap;
             private long a = -1;
             private long b = -1;
             private int prime = 1000000007;
@@ -27,12 +33,12 @@ namespace Addition
 
             public HashMap(int m)
             {
-                hashMap= new List<string>[m];
+                hashMap = new List<string>[m];
             }
 
             private long HashLong(long numberToHash)
             {
-                if(a == -1)
+                if (a == -1)
                 {
                     var randomGen = new Random();
                     a = randomGen.Next(1, this.prime - 1);
@@ -47,7 +53,7 @@ namespace Addition
             {
                 ulong total = 0;
 
-                for (int i = stringToHash.Length - 1; i >=0; i--)
+                for (int i = stringToHash.Length - 1; i >= 0; i--)
                 {
                     total = (total * 263 + Convert.ToUInt64(stringToHash[i])) % (ulong)prime;
                 }
@@ -58,11 +64,11 @@ namespace Addition
             public string Find(string stringToFind)
             {
                 var Hashed = HashString(stringToFind);
-                if(hashMap[Hashed] == null)
+                if (hashMap[Hashed] == null)
                 {
                     return "no";
                 }
-                else if(hashMap[Hashed].Find(x=>x == stringToFind) != null)
+                else if (hashMap[Hashed].Find(x => x == stringToFind) != null)
                 {
                     return "yes";
                 }
@@ -75,7 +81,7 @@ namespace Addition
             public void Add(string stringToAdd)
             {
                 var Hashed = HashString(stringToAdd);
-                if(hashMap[Hashed] == null)
+                if (hashMap[Hashed] == null)
                 {
                     hashMap[Hashed] = new List<string>();
                 }
@@ -90,7 +96,7 @@ namespace Addition
             public void Delete(string stringToDelete)
             {
                 var Hashed = HashString(stringToDelete);
-                if(hashMap[Hashed] != null)
+                if (hashMap[Hashed] != null)
                 {
                     var contact = hashMap[Hashed].SingleOrDefault(x => x == stringToDelete);
                     if (contact != null)
@@ -114,7 +120,7 @@ namespace Addition
         public static void HashQueries(string[] queries, int m)
         {
             var HashSetInstance = new HashMap(m);
-            foreach(var query in queries)
+            foreach (var query in queries)
             {
                 var querieSegments = query.Split(' ');
                 var qs = querieSegments.Skip(1);
@@ -129,7 +135,7 @@ namespace Addition
                         HashSetInstance.Delete(sqr);
                         break;
                     case "find":
-                       var contact = HashSetInstance.Find(sqr);
+                        var contact = HashSetInstance.Find(sqr);
                         Console.WriteLine(contact);
                         break;
                     case "check":
@@ -141,7 +147,7 @@ namespace Addition
                         }
                         else
                         {
-                           for(var i = HashBucket.Count -1; i>=0; i--)
+                            for (var i = HashBucket.Count - 1; i >= 0; i--)
                             {
                                 Console.Write(HashBucket[i] + " ");
                             }
@@ -150,28 +156,23 @@ namespace Addition
                         break;
                 }
             }
-            
+
 
         }
 
 
-        static void Main(string[] args)
-        {
+        //static void Main(string[] args)
+        //{
 
-            var m = Convert.ToInt32(Console.ReadLine());
-            var numberOfQueries = Convert.ToInt32(Console.ReadLine());
-            var list = new String[numberOfQueries];
-            for (var i =0; i <numberOfQueries; i++)
-            {
-                list[i] = Console.ReadLine();
-            }
-
-
-
-
-
-            HashQueries(list,m);
-        }
+        //    var m = Convert.ToInt32(Console.ReadLine());
+        //    var numberOfQueries = Convert.ToInt32(Console.ReadLine());
+        //    var list = new String[numberOfQueries];
+        //    for (var i = 0; i < numberOfQueries; i++)
+        //    {
+        //        list[i] = Console.ReadLine();
+        //    }
+        //    HashQueries(list, m);
+        //}
     }
 }
 
