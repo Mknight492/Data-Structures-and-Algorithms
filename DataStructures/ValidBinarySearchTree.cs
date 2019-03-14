@@ -9,7 +9,7 @@ namespace Addition
 {
 
 
-    class Program
+    class ValidBinarySearchTree
     {
         public class Node
         {
@@ -26,9 +26,9 @@ namespace Addition
         }
 
 
-        public static MaxMinPair MaxValidSubtree(long[][]Tree, long index)
+        public static MaxMinPair MaxValidSubtree(long[][] Tree, long index)
         {
-            if(Tree.Length == 0)
+            if (Tree.Length == 0)
             {
                 return new MaxMinPair
                 {
@@ -53,17 +53,17 @@ namespace Addition
             MaxMinPair MaxMinRightChild = null;
 
             //otherwise find the max/min pairs of its children.
-            if(Tree[index][1] != -1)
+            if (Tree[index][1] != -1)
             {
                 MaxMinLeftChild = MaxValidSubtree(Tree, Tree[index][1]);
             }
-            if(Tree[index][2] != -1)
+            if (Tree[index][2] != -1)
             {
                 MaxMinRightChild = MaxValidSubtree(Tree, Tree[index][2]);
             }
 
             //if either of the subtrees are invalid this node is invalid
-            if( MaxMinLeftChild != null && !MaxMinLeftChild.Valid 
+            if (MaxMinLeftChild != null && !MaxMinLeftChild.Valid
               || MaxMinRightChild != null && !MaxMinRightChild.Valid)
             {
                 return new MaxMinPair
@@ -72,11 +72,11 @@ namespace Addition
                 };
             }
 
-            //else return the MaxMinpair of the subtree
+            //else return the MaxMinpair of the sbutree
             if (MaxMinRightChild != null && MaxMinLeftChild != null)
             {
                 if (MaxMinLeftChild.Max < currentNodeValue
-                  && MaxMinRightChild.Min >= currentNodeValue)
+                  && MaxMinRightChild.Min > currentNodeValue)
                 {
 
                     return new MaxMinPair
@@ -87,8 +87,9 @@ namespace Addition
                     };
                 }
 
-            }else if(MaxMinRightChild != null 
-                && MaxMinRightChild.Min >= currentNodeValue)
+            }
+            else if (MaxMinRightChild != null
+               && MaxMinRightChild.Min > currentNodeValue)
             {
                 return new MaxMinPair
                 {
@@ -97,14 +98,14 @@ namespace Addition
                     Valid = true
                 };
             }
-            else if(MaxMinLeftChild != null
+            else if (MaxMinLeftChild != null
                 && MaxMinLeftChild.Max < currentNodeValue)
             {
                 return new MaxMinPair
                 {
-                   Max = Math.Max( MaxMinLeftChild.Max, currentNodeValue),
-                   Min = MaxMinLeftChild.Min,
-                   Valid = true
+                    Max = Math.Max(MaxMinLeftChild.Max, currentNodeValue),
+                    Min = MaxMinLeftChild.Min,
+                    Valid = true
                 };
 
             }
@@ -124,36 +125,36 @@ namespace Addition
 
 
 
-    
 
 
-        static void Main(string[] args)
-        {
-            var numberOfQueries = Convert.ToInt32(Console.ReadLine());
 
-            var node2Array = new long[numberOfQueries][];
+        //static void Main(string[] args)
+        //{
+        //    var numberOfQueries = Convert.ToInt32(Console.ReadLine());
 
-            for (var i = 0; i < numberOfQueries; i++)
-            {
-                var input = Array.ConvertAll(Console.ReadLine().Split(' '), c => Convert.ToInt64(c));
-                node2Array[i] = new long[3];
-                node2Array[i][0] = input[0];
-                node2Array[i][1] = input[1];
-                node2Array[i][2] = input[2];
-            }
+        //    var node2Array = new long[numberOfQueries][];
 
-            var valid = MaxValidSubtree(node2Array, 0).Valid;
+        //    for (var i = 0; i < numberOfQueries; i++)
+        //    {
+        //        var input = Array.ConvertAll(Console.ReadLine().Split(' '), c => Convert.ToInt64(c));
+        //        node2Array[i] = new long[3];
+        //        node2Array[i][0] = input[0];
+        //        node2Array[i][1] = input[1];
+        //        node2Array[i][2] = input[2];
+        //    }
 
-            if (valid)
-            {
-                Console.WriteLine("CORRECT");
-            }
-            else
-            {
-                Console.WriteLine("INCORRECT");
-            }
+        //    var valid = MaxValidSubtree(node2Array, 0).Valid;
 
-        }
+        //    if (valid)
+        //    {
+        //        Console.WriteLine("CORRECT");
+        //    }
+        //    else
+        //    {
+        //        Console.WriteLine("INCORRECT");
+        //    }
+
+        //}
     }
 }
 

@@ -54,6 +54,8 @@
     <Compile Include="DataStructures\MakeHeap.cs" />
     <Compile Include="DataStructures\ParallelProcessing.cs" />
     <Compile Include="DataStructures\StringHashMap.cs" />
+    <Compile Include="DataStructures\ValidBinarySearchTree.cs" />
+    <Compile Include="DataStructures\ValidBSTHard.cs" />
     <Compile Include="ToolBox\ArithmeticOperation.cs" />
     <Compile Include="ToolBox\KnapSackDiscrete.cs" />
     <Compile Include="ToolBox\minSubString.cs" />
