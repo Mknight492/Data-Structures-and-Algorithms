@@ -49,6 +49,7 @@
   <ItemGroup>
     <Compile Include="DataStructures\brackets.cs" />
     <Compile Include="DataStructures\ComputeTreeHeight.cs" />
+    <Compile Include="DataStructures\ContemporaneousTraversal.cs" />
     <Compile Include="DataStructures\HashMap.cs" />
     <Compile Include="DataStructures\MakeHeap.cs" />
     <Compile Include="DataStructures\ParallelProcessing.cs" />

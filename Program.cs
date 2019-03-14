@@ -18,189 +18,143 @@ namespace Addition
             public Node RChild { get; set; }
         }
 
-        public static void InOrderTraversal(Node rootNode)
+        public class MaxMinPair
         {
-            if(rootNode.LChild != null)
-            {
-                InOrderTraversal(rootNode.LChild);
-            }
-            Console.Write(rootNode.Key + " ");
-            if(rootNode.RChild != null)
-            {
-                InOrderTraversal(rootNode.RChild);
-            }
-            
+            public long Min { get; set; }
+            public long Max { get; set; }
+            public bool Valid { get; set; }
         }
 
-        public static void PreOrderTraversal(Node rootNode)
+
+        public static MaxMinPair MaxValidSubtree(long[][]Tree, long index)
         {
-            Console.Write(rootNode.Key + " ");
-            if (rootNode.LChild != null)
+            if(Tree.Length == 0)
             {
-                PreOrderTraversal(rootNode.LChild);
-            }
-            
-            if (rootNode.RChild != null)
-            {
-                PreOrderTraversal(rootNode.RChild);
-            }
-        }
-
-        public static void PostOrderTraversal(Node rootNode)
-        {
-            
-            if (rootNode.LChild != null)
-            {
-                PostOrderTraversal(rootNode.LChild);
-            }
-
-            if (rootNode.RChild != null)
-            {
-                PostOrderTraversal(rootNode.RChild);
-            }
-            Console.Write(rootNode.Key + " ");
-        }
-
-        
-        public static void ContemporaneousTraversal(int[][] Tree)
-        {
-            var inOrderArray = new List<int>();
-            var preOrderArray = new List<int>();
-            var postOrderArray = new List<int>();
-            var traversalStack = new Stack<int>();
-
-            var CurrentIndex = 0;
-            traversalStack.Push(CurrentIndex);
-
-            while (traversalStack.Any())
-            {
-                CurrentIndex = traversalStack.Peek();
-
-                //if chech right child and add this to stack be processed last if it exists
-                if (Tree[CurrentIndex][2] != -1)
+                return new MaxMinPair
                 {
-                    traversalStack.Push(Tree[CurrentIndex][2]);
-                }
+                    Valid = true
+                };
+            }
+            long currentNodeValue = Tree[index][0];
 
-                if (Tree[CurrentIndex][1] != -1)
+
+            //if this tree is a root node return the value of the node
+            if (Tree[index][1] == -1 && Tree[index][2] == -1)
+            {
+                return new MaxMinPair
                 {
-                    preOrderArray.Add(Tree[CurrentIndex][1]);
-                    traversalStack.Push(Tree[CurrentIndex][1]);
-                }
+                    Min = currentNodeValue,
+                    Max = currentNodeValue,
+                    Valid = true
+                };
+            }
 
-                //if tree has no left but a right branch add it to inOrderTrav
-                if (Tree[CurrentIndex][1] == -1 && Tree[CurrentIndex][2] != -1)
+            MaxMinPair MaxMinLeftChild = null;
+            MaxMinPair MaxMinRightChild = null;
+
+            //otherwise find the max/min pairs of its children.
+            if(Tree[index][1] != -1)
+            {
+                MaxMinLeftChild = MaxValidSubtree(Tree, Tree[index][1]);
+            }
+            if(Tree[index][2] != -1)
+            {
+                MaxMinRightChild = MaxValidSubtree(Tree, Tree[index][2]);
+            }
+
+            //if either of the subtrees are invalid this node is invalid
+            if( MaxMinLeftChild != null && !MaxMinLeftChild.Valid 
+              || MaxMinRightChild != null && !MaxMinRightChild.Valid)
+            {
+                return new MaxMinPair
                 {
-                    inOrderArray.Add(CurrentIndex);
-                }
+                    Valid = false
+                };
+            }
 
-                if (Tree[CurrentIndex][1] == -1 && Tree[CurrentIndex][2] == -1)
+            //else return the MaxMinpair of the sbutree
+            if (MaxMinRightChild != null && MaxMinLeftChild != null)
+            {
+                if (MaxMinLeftChild.Max < currentNodeValue
+                  && MaxMinRightChild.Min > currentNodeValue
+                  && MaxMinLeftChild.Valid
+                  && MaxMinRightChild.Valid)
                 {
-                    postOrderArray.Add(Tree[CurrentIndex][0]);
-                    traversalStack.Pop();
-                    if(!traversalStack.Any())
-                    CurrentIndex = traversalStack.Pop();
 
-                    //if no left children add the nodes key to inOrderTraversal Array
-                    if (Tree[CurrentIndex][2] != -1)
+                    return new MaxMinPair
                     {
-                        inOrderArray.Add(Tree[CurrentIndex][0]);
-                        traversalStack.Push(Tree[CurrentIndex][2]);
-
-                    }
-
+                        Min = MaxMinLeftChild.Min,
+                        Max = MaxMinRightChild.Max,
+                        Valid = true
+                    };
                 }
-  
 
-
-
-                //then put th
-
-            }
-
-            //Array.ConvertAll(inOrderArray.ToArray(), x => Convert.ToString(x)).Join(' ');
-
-            //Console.WriteLine(string.Join(inOrderArray, " ");
-
-            foreach(var node in preOrderArray)
+            }else if(MaxMinRightChild != null 
+                && MaxMinRightChild.Min > currentNodeValue)
             {
-                Console.Write(node + " ");
+                return new MaxMinPair
+                {
+                    Max = MaxMinRightChild.Max,
+                    Min = Math.Min(MaxMinRightChild.Min, currentNodeValue),
+                    Valid = true
+                };
             }
-            Console.WriteLine();
+            else if(MaxMinLeftChild != null
+                && MaxMinLeftChild.Max < currentNodeValue)
+            {
+                return new MaxMinPair
+                {
+                   Max = Math.Max( MaxMinLeftChild.Max, currentNodeValue),
+                   Min = MaxMinLeftChild.Min,
+                   Valid = true
+                };
+
+            }
+
+
+
+
+            //else something has gone wrong
+            return new MaxMinPair
+            {
+                Valid = false
+            };
+
+
+
         }
+
+
 
     
-
-        public static void SingleTraversal(int[][]Tree, int Node, List<int>[] OrderArray)
-        {
-            OrderArray[1].Add(Tree[Node][0]);
-            if (Tree[Node][1] != -1)
-            {
-                SingleTraversal(Tree, Tree[Node][1], OrderArray);
-            }
-            OrderArray[0].Add(Tree[Node][0]);
-            if (Tree[Node][2] != -1)
-            {
-                SingleTraversal(Tree, Tree[Node][2], OrderArray);
-
-            }
-            OrderArray[2].Add(Tree[Node][0]);
-        }
-
-
-
 
 
         static void Main(string[] args)
         {
             var numberOfQueries = Convert.ToInt32(Console.ReadLine());
-            //var nodeArray = new Node[numberOfQueries];
 
-            //for (var i = 0; i < numberOfQueries; i++)
-            //{
-            //    nodeArray[i] = new Node();
-            //}
-
-
-            var node2Array = new int[numberOfQueries][];
+            var node2Array = new long[numberOfQueries][];
 
             for (var i = 0; i < numberOfQueries; i++)
             {
-                var input = Array.ConvertAll(Console.ReadLine().Split(' '), c => Convert.ToInt32(c));
-                //nodeArray[i].Key = input[0];
-                node2Array[i] = new int[3];
+                var input = Array.ConvertAll(Console.ReadLine().Split(' '), c => Convert.ToInt64(c));
+                node2Array[i] = new long[3];
                 node2Array[i][0] = input[0];
                 node2Array[i][1] = input[1];
                 node2Array[i][2] = input[2];
-                //if (input[1] != -1)
-                //{
-                //    nodeArray[i].LChild = nodeArray[input[1]];
-                //}
-                //if (input[2] != -1)
-                //{
-                //    nodeArray[i].RChild = nodeArray[input[2]];
-                //}
             }
 
-            var OrderArrray = new List<int>[3];
+            var valid = MaxValidSubtree(node2Array, 0).Valid;
 
-            for (var i = 0; i < 3; i++)
+            if (valid)
             {
-                OrderArrray[i] = new List<int>();
+                Console.WriteLine("CORRECT");
             }
-
-            //InOrderTraversal(nodeArray[0]);
-            //Console.WriteLine();
-            //PreOrderTraversal(nodeArray[0]);
-            //Console.WriteLine();
-            //PostOrderTraversal(nodeArray[0]);
-
-            SingleTraversal(node2Array, 0, OrderArrray);
-            foreach(var list in OrderArrray)
+            else
             {
-                Console.WriteLine(string.Join(" ", list));
+                Console.WriteLine("INCORRECT");
             }
-            //ContemporaneousTraversal(node2Array);
+
         }
     }
 }
