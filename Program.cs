@@ -16,15 +16,19 @@ namespace Addition
         {
             private long Verticies;
             private List<long>[] Adj;
+            private List<long>[] ReversedAdj;
 
             public Graph(long verticies)
             {
                 Verticies = verticies;
+
                 Adj = new List<long>[verticies];
+                ReversedAdj = new List<long>[verticies];
 
                 for(long i =0; i< verticies; i++)
                 {
                     Adj[i] = new List<long>();
+                    ReversedAdj[i] = new List<long>();
                 }
             }
 
@@ -32,6 +36,10 @@ namespace Addition
             {
                 if (!Adj[source].Contains(data))
                     Adj[source].Add(data);
+
+                if (!ReversedAdj[data].Contains(source))
+                    ReversedAdj[data].Add(source);
+
             }
 
             public void AddUndirectedEdge(long source, long data)
@@ -83,7 +91,7 @@ namespace Addition
             public long[] TopologicalSort()
             {
                 var visted = new bool[Verticies];
-                var sortedNodes = new List<long>();
+                var sortedNodes = new Stack<long>();
 
                 for (long i = 0; i < Verticies; i++)
                 {
@@ -92,12 +100,20 @@ namespace Addition
                       
 
                 }
-                return sortedNodes.ToArray();
+
+                var sortedArray = new long[Verticies];
+                var count = 0;
+                while (sortedNodes.Any())
+                {
+                    sortedArray[count] = sortedNodes.Pop();
+                    count++;
+                }
+                return sortedArray;
 
 
             }
 
-            private void TopologicalSortRecursive(long i, bool[] visited, List<long> sortedNodes)
+            private void TopologicalSortRecursive(long i, bool[] visited, Stack<long> sortedNodes)
             {
                 visited[i] = true;
 
@@ -112,9 +128,45 @@ namespace Addition
 
                     }
                 }
-                    sortedNodes.Add(i);       
+                    sortedNodes.Push(i);       
+            }
+
+            public int StronglyConnectedComponents()
+            {
+                //should acutally run TopologocialSort on AdjReversed but as we're just counting the number of SCC it doesn't matter.
+                var topoSortedArray = TopologicalSort();
+
+
+                var count = 0;
+                var visited = new bool[Verticies];
+
+                for(var i =0; i< topoSortedArray.Length; i++)
+                {
+                    if (!visited[topoSortedArray[i]])
+                    {
+                        SCCRecursive(topoSortedArray[i], visited);
+                        count++;
+
+                    }
+                }
+
+                return count;
+            }
+
+            private void SCCRecursive(long i, bool[] visited)
+            {
+                visited[i] = true;
+                var furtherAccessableNodes = ReversedAdj[i];
+
+                for(var j =0; j<furtherAccessableNodes.Count; j++)
+                {
+                    if(!visited[furtherAccessableNodes[j]])
+                        SCCRecursive(furtherAccessableNodes[j], visited);
+                }
             }
         }
+
+
 
 
 
@@ -133,12 +185,9 @@ namespace Addition
                 graphInstance.AddDirectedEdge(edge[0] - 1,edge[1] - 1);
             }
 
-            var sortedGraph = graphInstance.TopologicalSort();
+            var componentCount = graphInstance.StronglyConnectedComponents();
             //sortedGraph.Reverse();
-            for(var i =sortedGraph.Length-1; i>=0;i--)
-            {
-                Console.Write((sortedGraph[i] +1) + " ");
-            }
+            Console.WriteLine(componentCount);
         }
     }
 }
