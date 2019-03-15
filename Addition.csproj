@@ -59,6 +59,7 @@
     <Compile Include="Graphs\Acyclicity.cs" />
     <Compile Include="Graphs\Groups.cs" />
     <Compile Include="Graphs\Isconnected.cs" />
+    <Compile Include="Graphs\TopologicalSort.cs" />
     <Compile Include="ToolBox\ArithmeticOperation.cs" />
     <Compile Include="ToolBox\KnapSackDiscrete.cs" />
     <Compile Include="ToolBox\minSubString.cs" />

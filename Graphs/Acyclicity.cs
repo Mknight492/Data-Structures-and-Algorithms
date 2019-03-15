@@ -9,7 +9,7 @@ namespace Addition
 {
 
 
-    class Program
+    class Acyclicity
     {
 
         public class Graph
@@ -84,28 +84,28 @@ namespace Addition
 
 
 
-        static void Main(string[] args)
-        {
-            var input = Array.ConvertAll(Console.ReadLine().Split(' '), c => Convert.ToInt64(c));
-            long n = input[0]; //vertices
-            var m = input[1]; //edges
+        //static void Main(string[] args)
+        //{
+        //    var input = Array.ConvertAll(Console.ReadLine().Split(' '), c => Convert.ToInt64(c));
+        //    long n = input[0]; //vertices
+        //    var m = input[1]; //edges
 
-            var graphInstance = new Graph(n);
+        //    var graphInstance = new Graph(n);
 
-            for (var i = 0; i < m; i++)
-            {
-                var edge = Array.ConvertAll(Console.ReadLine().Split(' '), c => Convert.ToInt64(c));
-                graphInstance.AddDirectedEdge(edge[0] - 1, edge[1] - 1);
-            }
-
-
-            var conneteced = graphInstance.IsCyclic();
+        //    for (var i = 0; i < m; i++)
+        //    {
+        //        var edge = Array.ConvertAll(Console.ReadLine().Split(' '), c => Convert.ToInt64(c));
+        //        graphInstance.AddDirectedEdge(edge[0] - 1, edge[1] - 1);
+        //    }
 
 
-            if (conneteced) Console.WriteLine(1);
-            else Console.WriteLine(0);
+        //    var conneteced = graphInstance.IsCyclic();
 
-        }
+
+        //    if (conneteced) Console.WriteLine(1);
+        //    else Console.WriteLine(0);
+
+        //}
     }
 }
 

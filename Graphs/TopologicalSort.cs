@@ -9,7 +9,7 @@ namespace Addition
 {
 
 
-    class Program
+    class TopologicalSort
     {
 
         public class Graph
@@ -22,7 +22,7 @@ namespace Addition
                 Verticies = verticies;
                 Adj = new List<long>[verticies];
 
-                for(long i =0; i< verticies; i++)
+                for (long i = 0; i < verticies; i++)
                 {
                     Adj[i] = new List<long>();
                 }
@@ -47,11 +47,11 @@ namespace Addition
                 var visted = new bool[Verticies];
                 var accessableNodes = new bool[Verticies];
 
-                for(long i = 0; i< Verticies; i++)
+                for (long i = 0; i < Verticies; i++)
                 {
                     if (IsCyclicRecursive(i, visted, accessableNodes))
                         return true;
-   
+
                 }
                 return false;
             }
@@ -69,7 +69,7 @@ namespace Addition
 
                 var furtherAccessableNodes = Adj[i];
 
-                foreach(var node in furtherAccessableNodes)
+                foreach (var node in furtherAccessableNodes)
                 {
                     if (IsCyclicRecursive(node, visited, accessableNodes))
                         return true;
@@ -89,7 +89,7 @@ namespace Addition
                 {
                     if (!visted[i])
                         TopologicalSortRecursive(i, visted, sortedNodes);
-                      
+
 
                 }
                 return sortedNodes.ToArray();
@@ -112,34 +112,34 @@ namespace Addition
 
                     }
                 }
-                    sortedNodes.Add(i);       
+                sortedNodes.Add(i);
             }
         }
 
 
 
 
-        static void Main(string[] args)
-        {
-            var input = Array.ConvertAll(Console.ReadLine().Split(' '), c => Convert.ToInt64(c));
-            long n = input[0]; //vertices
-            var m = input[1]; //edges
+        //static void Main(string[] args)
+        //{
+        //    var input = Array.ConvertAll(Console.ReadLine().Split(' '), c => Convert.ToInt64(c));
+        //    long n = input[0]; //vertices
+        //    var m = input[1]; //edges
 
-            var graphInstance = new Graph(n);
+        //    var graphInstance = new Graph(n);
 
-            for (var i = 0; i < m; i++)
-            {
-                var edge = Array.ConvertAll(Console.ReadLine().Split(' '), c => Convert.ToInt64(c));
-                graphInstance.AddDirectedEdge(edge[0] - 1,edge[1] - 1);
-            }
+        //    for (var i = 0; i < m; i++)
+        //    {
+        //        var edge = Array.ConvertAll(Console.ReadLine().Split(' '), c => Convert.ToInt64(c));
+        //        graphInstance.AddDirectedEdge(edge[0] - 1, edge[1] - 1);
+        //    }
 
-            var sortedGraph = graphInstance.TopologicalSort();
-            //sortedGraph.Reverse();
-            for(var i =sortedGraph.Length-1; i>=0;i--)
-            {
-                Console.Write((sortedGraph[i] +1) + " ");
-            }
-        }
+        //    var sortedGraph = graphInstance.TopologicalSort();
+        //    //sortedGraph.Reverse();
+        //    for (var i = sortedGraph.Length - 1; i >= 0; i--)
+        //    {
+        //        Console.Write((sortedGraph[i] + 1) + " ");
+        //    }
+        //}
     }
 }
 
