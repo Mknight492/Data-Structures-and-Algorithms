@@ -22,7 +22,7 @@ namespace Addition
                 Verticies = verticies;
                 Adj = new List<long>[verticies];
 
-                for(long i =0; i< verticies; i++)
+                for (long i = 0; i < verticies; i++)
                 {
                     Adj[i] = new List<long>();
                 }
@@ -47,11 +47,11 @@ namespace Addition
                 var visted = new bool[Verticies];
                 var accessableNodes = new bool[Verticies];
 
-                for(long i = 0; i< Verticies; i++)
+                for (long i = 0; i < Verticies; i++)
                 {
                     if (IsCyclicRecursive(i, visted, accessableNodes))
                         return true;
-   
+
                 }
                 return false;
             }
@@ -69,7 +69,7 @@ namespace Addition
 
                 var furtherAccessableNodes = Adj[i];
 
-                foreach(var node in furtherAccessableNodes)
+                foreach (var node in furtherAccessableNodes)
                 {
                     if (IsCyclicRecursive(node, visited, accessableNodes))
                         return true;
@@ -95,13 +95,13 @@ namespace Addition
             for (var i = 0; i < m; i++)
             {
                 var edge = Array.ConvertAll(Console.ReadLine().Split(' '), c => Convert.ToInt64(c));
-                graphInstance.AddDirectedEdge(edge[0] - 1,edge[1] - 1);
+                graphInstance.AddDirectedEdge(edge[0] - 1, edge[1] - 1);
             }
 
 
             var conneteced = graphInstance.IsCyclic();
 
-           
+
             if (conneteced) Console.WriteLine(1);
             else Console.WriteLine(0);
 
