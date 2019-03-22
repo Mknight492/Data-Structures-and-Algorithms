@@ -9,7 +9,7 @@ namespace Addition
 {
 
 
-    class Program
+    class DijikstraMinHeap
     {
         public class HeapNode
         {
@@ -360,50 +360,47 @@ namespace Addition
 
         }
 
-        public static void NavieAlgorithm()
-        {
-
-        }
+ 
 
 
 
 
 
 
-        static void Main(string[] args)
-        {
-            var input = Array.ConvertAll(Console.ReadLine().Split(' '), c => Convert.ToInt64(c));
-            long n = input[0]; //vertices
-            var m = input[1]; //edges
+        //static void Main(string[] args)
+        //{
+        //    var input = Array.ConvertAll(Console.ReadLine().Split(' '), c => Convert.ToInt64(c));
+        //    long n = input[0]; //vertices
+        //    var m = input[1]; //edges
 
-            var graphInstance = new Graph(n);
+        //    var graphInstance = new Graph(n);
 
-            for (var i = 0; i < m; i++)
-            {
-                var edge = Array.ConvertAll(Console.ReadLine().Split(' '), c => Convert.ToUInt64(c));
-                var WeightedEdge = new WeightedEdge
-                {
-                    EndVertex = (long)edge[1] - 1,
-                    weight = edge[2]
-                };
-                graphInstance.AddDirectedEdge((long)edge[0] - 1, WeightedEdge);
-            }
+        //    for (var i = 0; i < m; i++)
+        //    {
+        //        var edge = Array.ConvertAll(Console.ReadLine().Split(' '), c => Convert.ToUInt64(c));
+        //        var WeightedEdge = new WeightedEdge
+        //        {
+        //            EndVertex = (long)edge[1] - 1,
+        //            weight = edge[2]
+        //        };
+        //        graphInstance.AddDirectedEdge((long)edge[0] - 1, WeightedEdge);
+        //    }
 
-            var input2 = Array.ConvertAll(Console.ReadLine().Split(' '), c => Convert.ToInt64(c));
-            var a = input2[0] - 1;
-            var b = input2[1] - 1;
-            var componentCount = graphInstance.Djikstras(a, b);
-            //sortedGraph.Reverse();
-            if (componentCount != ulong.MaxValue)
-            {
-                Console.WriteLine(componentCount);
-            }
-            else
-            {
-                Console.WriteLine(-1);
-            }
+        //    var input2 = Array.ConvertAll(Console.ReadLine().Split(' '), c => Convert.ToInt64(c));
+        //    var a = input2[0] - 1;
+        //    var b = input2[1] - 1;
+        //    var componentCount = graphInstance.Djikstras(a, b);
+        //    //sortedGraph.Reverse();
+        //    if (componentCount != ulong.MaxValue)
+        //    {
+        //        Console.WriteLine(componentCount);
+        //    }
+        //    else
+        //    {
+        //        Console.WriteLine(-1);
+        //    }
 
-        }
+        //}
     }
 }
 

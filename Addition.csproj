@@ -57,6 +57,7 @@
     <Compile Include="DataStructures\ValidBinarySearchTree.cs" />
     <Compile Include="DataStructures\ValidBSTHard.cs" />
     <Compile Include="Graphs\Acyclicity.cs" />
+    <Compile Include="Graphs\BFS.cs" />
     <Compile Include="Graphs\DijkstraMinHeap.cs" />
     <Compile Include="Graphs\Groups.cs" />
     <Compile Include="Graphs\Isconnected.cs" />

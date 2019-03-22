@@ -20,7 +20,7 @@ namespace Addition
 
 
 
-        public class Graph 
+        public class Graph
         {
             private long Verticies;
             private List<long>[] Adj;
@@ -33,7 +33,7 @@ namespace Addition
                 Adj = new List<long>[verticies];
                 ReversedAdj = new List<long>[verticies];
 
-                for(long i =0; i< verticies; i++)
+                for (long i = 0; i < verticies; i++)
                 {
                     Adj[i] = new List<long>();
                     ReversedAdj[i] = new List<long>();
@@ -44,7 +44,7 @@ namespace Addition
             {
                 if (!Adj[source].Contains(data))
                     Adj[source].Add(data);
-                
+
             }
 
             public void AddUndirectedEdge(long source, long data)
@@ -61,9 +61,9 @@ namespace Addition
             public long ShortestPath(long a, long b)
             {
                 //array which keeps track of the current shortest path for the corresponding vertex i
-                var DistanceArray = new long [Verticies];
+                var DistanceArray = new long[Verticies];
 
-                for(var i =0; i< Verticies; i++)
+                for (var i = 0; i < Verticies; i++)
                 {
                     DistanceArray[i] = long.MaxValue;
                 }
@@ -77,25 +77,25 @@ namespace Addition
                 {
                     var nextMinNode = NodesToProcess.Dequeue();
                     var nextAccesableNodes = Adj[nextMinNode];
-                    
-                    foreach(var node in nextAccesableNodes)
+
+                    foreach (var node in nextAccesableNodes)
                     {
                         var currentMinDistance = DistanceArray[node];
                         var distanceFromNextNode = DistanceArray[nextMinNode] + 1;
-                        if(DistanceArray[nextMinNode] != long.MaxValue && distanceFromNextNode < currentMinDistance)
+                        if (DistanceArray[nextMinNode] != long.MaxValue && distanceFromNextNode < currentMinDistance)
                         {
                             NodesToProcess.Enqueue(node);
                             DistanceArray[node] = distanceFromNextNode;
                         }
                     }
                 }
-                
 
-            if(DistanceArray[b] == long.MaxValue)
-            {
-                return -1;
-            }
-            return DistanceArray[b];
+
+                if (DistanceArray[b] == long.MaxValue)
+                {
+                    return -1;
+                }
+                return DistanceArray[b];
 
 
             }
@@ -116,18 +116,18 @@ namespace Addition
             for (var i = 0; i < m; i++)
             {
                 var edge = Array.ConvertAll(Console.ReadLine().Split(' '), c => Convert.ToInt64(c));
-                graphInstance.AddUndirectedEdge(edge[0]-1, edge[1]-1);
+                graphInstance.AddUndirectedEdge(edge[0] - 1, edge[1] - 1);
             }
 
             var input2 = Array.ConvertAll(Console.ReadLine().Split(' '), c => Convert.ToInt64(c));
-            var a = input2[0]-1;
-            var b = input2[1]-1;
-            var componentCount = graphInstance.ShortestPath(a,b);
+            var a = input2[0] - 1;
+            var b = input2[1] - 1;
+            var componentCount = graphInstance.ShortestPath(a, b);
             //sortedGraph.Reverse();
 
             Console.WriteLine(componentCount);
 
-            
+
         }
     }
 }
