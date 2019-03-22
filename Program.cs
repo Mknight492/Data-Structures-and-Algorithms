@@ -12,102 +12,191 @@ namespace Addition
     class Program
     {
 
-        public enum Status
+        public class WeightedEdge
         {
-            undiscovered,
-            black,
-            white
+            public long EndVertex { get; set; }
+            public decimal weight { get; set; }
         }
 
         public class vertex
         {
             public int value { get; set; }
-            public Status Status { get; set; }
+            public bool Explored { get; set; }
         }
 
 
 
-        public class Graph 
+        public class Graph
         {
             private long Verticies;
-            private List<long>[] Adj;
-            private List<long>[] ReversedAdj;
+            private List<WeightedEdge>[] Adj;
+            private List<WeightedEdge>[] ReversedAdj;
 
             public Graph(long verticies)
             {
                 Verticies = verticies;
 
-                Adj = new List<long>[verticies];
-                ReversedAdj = new List<long>[verticies];
+                Adj = new List<WeightedEdge>[verticies];
+                ReversedAdj = new List<WeightedEdge>[verticies];
 
-                for(long i =0; i< verticies; i++)
+                for (long i = 0; i < verticies; i++)
                 {
-                    Adj[i] = new List<long>();
-                    ReversedAdj[i] = new List<long>();
+                    Adj[i] = new List<WeightedEdge>();
+                    ReversedAdj[i] = new List<WeightedEdge>();
                 }
             }
 
-            public void AddDirectedEdge(long source, long data)
-            {
-                if (!Adj[source].Contains(data))
-                    Adj[source].Add(data);
-                
-            }
-
-            public void AddUndirectedEdge(long source, long data)
+            public void AddDirectedEdge(long source, WeightedEdge data)
             {
                 if (!Adj[source].Contains(data))
                     Adj[source].Add(data);
 
-                if (!Adj[data].Contains(source))
-                    Adj[data].Add(source);
+                var reveresedEdge = new WeightedEdge
+                {
+                    weight = data.weight,
+                    EndVertex = source
+                };
+
+                if (!ReversedAdj[data.EndVertex].Contains(reveresedEdge))
+                    ReversedAdj[data.EndVertex].Add(reveresedEdge);
             }
 
 
 
-            public bool IsBipartite()
+            public void Explore(vertex[] vertexArray, long currentNode)
             {
-                //array which keeps track of the current shortest path for the corresponding vertex i
-                var DistanceArray = new Status[Verticies];
+                vertexArray[currentNode].Explored = true;
+                var accessableNodes = Adj[currentNode];
+                for (var i = 0; i < accessableNodes.Count; i++)
+                {
+                    if (!vertexArray[accessableNodes[i].EndVertex].Explored)
+                    {
+                        Explore(vertexArray, vertexArray[accessableNodes[i].EndVertex].value);
+                    }
+                }
+            }
+
+            public List<WeightedEdge>[] AccesableNodes(long a)
+            {
+                var nodesToExplore = new Stack<long>();
+
+                var vertexArray = new vertex[Verticies];
 
                 for (var i = 0; i < Verticies; i++)
                 {
-                    DistanceArray[i] = Status.undiscovered;
+                    vertexArray[i] = new vertex
+                    {
+                        value = i,
+                        Explored = false
+                    };
                 }
 
-                var NodesToProcess = new Queue<long>();
+                Explore(vertexArray, a);
 
-                NodesToProcess.Enqueue(0);
-                DistanceArray[0] = Status.black;
 
-                var valid = true;
-
-                while (NodesToProcess.Any())
+                var accessableNode = new List<WeightedEdge>[Verticies];
+                for (var i = 0; i < Verticies; i++)
                 {
-                    var nextMinNode = NodesToProcess.Dequeue();
-                    var nextAccesableNodes = Adj[nextMinNode];
-
-                    foreach (var node in nextAccesableNodes)
+                    if (vertexArray[i].Explored)
                     {
-                        if (DistanceArray[node] == Status.undiscovered)
-                        {
-                            DistanceArray[node] = (DistanceArray[nextMinNode] == Status.black) ? Status.white : Status.black;
-                            NodesToProcess.Enqueue(node);
-                        }
+                        accessableNode[i] = Adj[i];
+                    }
+                    else
+                    {
+                        accessableNode[i] = new List<WeightedEdge>();
+                    }
+                }
+                return accessableNode;
+            }
 
-                        else if (
-                            (DistanceArray[node] == Status.black && DistanceArray[nextMinNode] == Status.black)
-                            || (DistanceArray[node] == Status.white && DistanceArray[nextMinNode] == Status.white))
-                        {
+            public long FindRoot()
+            {
+                var Explored = new bool[Verticies];
 
-                            valid = false;
-                            break;
+                while (true)
+                {
+                    for (var i = 0; i < Verticies; i++)
+                    {
+                        if (!Explored[i])
+                        {
+                            return FindRootRec(i, Explored);
                         }
                     }
                 }
-                return valid;
+
             }
+            private long FindRootRec(int i, bool[] explored)
+            {
+                explored[i] = true;
+
+                var accesableNodes = ReversedAdj[i];
+
+                if (accesableNodes.Count == 0)
+                {
+                    return i;
+                }
+                else
+                {
+                    foreach (var node in accesableNodes)
+                    {
+                        return FindRootRec((int)node.EndVertex, explored);
+                    }
+                }
+
+                return -1;
+            }
+
+
+            public bool HasNegativeCycle()
+            {
+                var MinimumDistances = new decimal[Verticies];
+
+                for (var i = 0; i < Verticies; i++)
+                {
+                    MinimumDistances[i] = decimal.MaxValue;
+                }
+
+                //var RootNode = FindRoot(); // this should be a SCC sort.
+
+                bool AdjustmentMade;
+
+                for (var i = 0; i <= Verticies; i++)
+                {
+                    AdjustmentMade = false;
+
+                    for (var j = 0; j < Verticies; j++)
+                    {
+
+                        foreach (var edge in Adj[j])
+                        {
+                            if (MinimumDistances[j] == decimal.MaxValue)
+                            {
+                                MinimumDistances[j] = 1;
+                            }
+                            var currentMinimum = MinimumDistances[edge.EndVertex];
+                            var newDistance = MinimumDistances[j] + edge.weight;
+                            if (newDistance < currentMinimum)
+                            {
+                                MinimumDistances[edge.EndVertex] = newDistance;
+                                AdjustmentMade = true;
+                            }
+
+                        }
+                    }
+                    if (i == Verticies)
+                    {
+                        return AdjustmentMade;
+                    }
+                }
+
+
+                return false;
+            }
+
+
+
         }
+
 
 
 
@@ -123,13 +212,15 @@ namespace Addition
             for (var i = 0; i < m; i++)
             {
                 var edge = Array.ConvertAll(Console.ReadLine().Split(' '), c => Convert.ToInt64(c));
-                graphInstance.AddUndirectedEdge(edge[0] - 1, edge[1] - 1);
+                var WeightedEdge = new WeightedEdge
+                {
+                    EndVertex = (long)edge[1] - 1,
+                    weight = edge[2]
+                };
+                graphInstance.AddDirectedEdge((long)edge[0] - 1, WeightedEdge);
             }
 
-            //var input2 = Array.ConvertAll(Console.ReadLine().Split(' '), c => Convert.ToInt64(c));
-            //var a = input2[0] - 1;
-            //var b = input2[1] - 1;
-            var componentCount = graphInstance.IsBipartite();
+            var componentCount = graphInstance.HasNegativeCycle();
             //sortedGraph.Reverse();
             if (componentCount)
             {
@@ -140,8 +231,7 @@ namespace Addition
                 Console.WriteLine(0);
             }
 
-        }
-            
+            }
         
     }
 }

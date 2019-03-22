@@ -9,7 +9,7 @@ namespace Addition
 {
 
 
-    class Program
+    class IsBipartite
     {
 
         public enum Status
@@ -80,8 +80,6 @@ namespace Addition
                 NodesToProcess.Enqueue(0);
                 DistanceArray[0] = Status.black;
 
-                var valid = true;
-
                 while (NodesToProcess.Any())
                 {
                     var nextMinNode = NodesToProcess.Dequeue();
@@ -100,47 +98,46 @@ namespace Addition
                             || (DistanceArray[node] == Status.white && DistanceArray[nextMinNode] == Status.white))
                         {
 
-                            valid = false;
-                            break;
+                            return false;
                         }
                     }
                 }
-                return valid;
+                return true;
             }
         }
 
 
 
 
-        static void Main(string[] args)
-        {
-            var input = Array.ConvertAll(Console.ReadLine().Split(' '), c => Convert.ToInt64(c));
-            long n = input[0]; //vertices
-            var m = input[1]; //edges
+        //static void Main(string[] args)
+        //{
+        //    var input = Array.ConvertAll(Console.ReadLine().Split(' '), c => Convert.ToInt64(c));
+        //    long n = input[0]; //vertices
+        //    var m = input[1]; //edges
 
-            var graphInstance = new Graph(n);
+        //    var graphInstance = new Graph(n);
 
-            for (var i = 0; i < m; i++)
-            {
-                var edge = Array.ConvertAll(Console.ReadLine().Split(' '), c => Convert.ToInt64(c));
-                graphInstance.AddUndirectedEdge(edge[0] - 1, edge[1] - 1);
-            }
+        //    for (var i = 0; i < m; i++)
+        //    {
+        //        var edge = Array.ConvertAll(Console.ReadLine().Split(' '), c => Convert.ToInt64(c));
+        //        graphInstance.AddUndirectedEdge(edge[0] - 1, edge[1] - 1);
+        //    }
 
-            //var input2 = Array.ConvertAll(Console.ReadLine().Split(' '), c => Convert.ToInt64(c));
-            //var a = input2[0] - 1;
-            //var b = input2[1] - 1;
-            var componentCount = graphInstance.IsBipartite();
-            //sortedGraph.Reverse();
-            if (componentCount)
-            {
-                Console.WriteLine(1);
-            }
-            else
-            {
-                Console.WriteLine(0);
-            }
+        //    //var input2 = Array.ConvertAll(Console.ReadLine().Split(' '), c => Convert.ToInt64(c));
+        //    //var a = input2[0] - 1;
+        //    //var b = input2[1] - 1;
+        //    var componentCount = graphInstance.IsBipartite();
+        //    //sortedGraph.Reverse();
+        //    if (componentCount)
+        //    {
+        //        Console.WriteLine(1);
+        //    }
+        //    else
+        //    {
+        //        Console.WriteLine(0);
+        //    }
 
-        }
+        //}
 
 
     }
