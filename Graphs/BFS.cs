@@ -9,7 +9,7 @@ namespace Addition
 {
 
 
-    class Program
+    class PBFS
     {
 
         public class vertex
@@ -62,6 +62,7 @@ namespace Addition
             {
                 //array which keeps track of the current shortest path for the corresponding vertex i
                 var DistanceArray = new long[Verticies];
+                var prevVertexArray = new long[Verticies];
 
                 for (var i = 0; i < Verticies; i++)
                 {
@@ -86,6 +87,7 @@ namespace Addition
                         {
                             NodesToProcess.Enqueue(node);
                             DistanceArray[node] = distanceFromNextNode;
+                            prevVertexArray[node] = nextMinNode;
                         }
                     }
                 }
@@ -105,30 +107,30 @@ namespace Addition
 
 
 
-        static void Main(string[] args)
-        {
-            var input = Array.ConvertAll(Console.ReadLine().Split(' '), c => Convert.ToInt64(c));
-            long n = input[0]; //vertices
-            var m = input[1]; //edges
+        //static void Main(string[] args)
+        //{
+        //    var input = Array.ConvertAll(Console.ReadLine().Split(' '), c => Convert.ToInt64(c));
+        //    long n = input[0]; //vertices
+        //    var m = input[1]; //edges
 
-            var graphInstance = new Graph(n);
+        //    var graphInstance = new Graph(n);
 
-            for (var i = 0; i < m; i++)
-            {
-                var edge = Array.ConvertAll(Console.ReadLine().Split(' '), c => Convert.ToInt64(c));
-                graphInstance.AddUndirectedEdge(edge[0] - 1, edge[1] - 1);
-            }
+        //    for (var i = 0; i < m; i++)
+        //    {
+        //        var edge = Array.ConvertAll(Console.ReadLine().Split(' '), c => Convert.ToInt64(c));
+        //        graphInstance.AddUndirectedEdge(edge[0] - 1, edge[1] - 1);
+        //    }
 
-            var input2 = Array.ConvertAll(Console.ReadLine().Split(' '), c => Convert.ToInt64(c));
-            var a = input2[0] - 1;
-            var b = input2[1] - 1;
-            var componentCount = graphInstance.ShortestPath(a, b);
-            //sortedGraph.Reverse();
+        //    var input2 = Array.ConvertAll(Console.ReadLine().Split(' '), c => Convert.ToInt64(c));
+        //    var a = input2[0] - 1;
+        //    var b = input2[1] - 1;
+        //    var componentCount = graphInstance.ShortestPath(a, b);
+        //    //sortedGraph.Reverse();
 
-            Console.WriteLine(componentCount);
+        //    Console.WriteLine(componentCount);
 
 
-        }
+        //}
     }
 }
 

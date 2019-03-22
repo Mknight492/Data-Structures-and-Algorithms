@@ -27,7 +27,7 @@ namespace Addition
 
 
 
-        public class Graph 
+        public class Graph
         {
             private long Verticies;
             private List<long>[] Adj;
@@ -40,7 +40,7 @@ namespace Addition
                 Adj = new List<long>[verticies];
                 ReversedAdj = new List<long>[verticies];
 
-                for(long i =0; i< verticies; i++)
+                for (long i = 0; i < verticies; i++)
                 {
                     Adj[i] = new List<long>();
                     ReversedAdj[i] = new List<long>();
@@ -51,7 +51,7 @@ namespace Addition
             {
                 if (!Adj[source].Contains(data))
                     Adj[source].Add(data);
-                
+
             }
 
             public void AddUndirectedEdge(long source, long data)
@@ -141,8 +141,8 @@ namespace Addition
             }
 
         }
-            
-        
+
+
     }
 }
 
