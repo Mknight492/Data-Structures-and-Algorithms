@@ -14,7 +14,7 @@ namespace Addition
         public class HeapNode
         {
             public long Vertex { get; set; }
-            public ulong Distance { get; set; }   
+            public ulong Distance { get; set; }
         }
 
         public class MinHeap
@@ -69,7 +69,7 @@ namespace Addition
                 if (heap.Length == 1 || index == 1) return;
                 var parentIndex = (long)Math.Floor(index / (double)2);
 
-                while (index !=1 && heap[index].Distance < heap[parentIndex].Distance)
+                while (index != 1 && heap[index].Distance < heap[parentIndex].Distance)
                 {
 
                     //need to swap the indexs of the heaps array and the refArray
@@ -92,18 +92,18 @@ namespace Addition
 
 
 
-            public void DownShift( long index)
+            public void DownShift(long index)
             {
                 if (heap.Length == 1) return;
                 var currentPosition = index;
                 var Checked = false;
                 //check current position has two leaf nodes
-                while (currentPosition * 2  <count && !Checked)
+                while (currentPosition * 2 < count && !Checked)
                 {
                     //check left child
                     var LChildIndex = currentPosition * 2;
                     var RChildIndex = currentPosition * 2 + 1;
-                   
+
                     var smallestIndex = currentPosition;
                     var LChildIsSmallest = false;
                     //is Lchild the smallest
@@ -118,7 +118,7 @@ namespace Addition
                         smallestIndex = RChildIndex;
                         LChildIsSmallest = false;
                     }
-                    if (heap[LChildIndex].Distance >= heap[currentPosition].Distance && (RChildIndex > count ||  heap[RChildIndex].Distance >= heap[currentPosition].Distance))
+                    if (heap[LChildIndex].Distance >= heap[currentPosition].Distance && (RChildIndex > count || heap[RChildIndex].Distance >= heap[currentPosition].Distance))
                     {
                         Checked = true;
                     }
@@ -138,16 +138,16 @@ namespace Addition
                         }
                         else
                         {
-                            currentPosition = currentPosition * 2 +1;
+                            currentPosition = currentPosition * 2 + 1;
                         }
                     }
 
                 }
-        
+
 
             }
 
-            private void swap( int indexA, int indexB)
+            private void swap(int indexA, int indexB)
             {
                 var tempNode = heap[indexA];
                 heap[indexA] = heap[indexB];
@@ -186,7 +186,7 @@ namespace Addition
 
 
 
-        public class Graph 
+        public class Graph
         {
             private long Verticies;
             private List<WeightedEdge>[] Adj;
@@ -199,7 +199,7 @@ namespace Addition
                 Adj = new List<WeightedEdge>[verticies];
                 ReversedAdj = new List<WeightedEdge>[verticies];
 
-                for(long i =0; i< verticies; i++)
+                for (long i = 0; i < verticies; i++)
                 {
                     Adj[i] = new List<WeightedEdge>();
                     ReversedAdj[i] = new List<WeightedEdge>();
@@ -210,7 +210,7 @@ namespace Addition
             {
                 if (!Adj[source].Contains(data))
                     Adj[source].Add(data);
-                
+
             }
 
             public void AddUndirectedEdge(long source, WeightedEdge data)
@@ -248,11 +248,11 @@ namespace Addition
                     };
                 }
 
-                Explore( vertexArray, a);
-        
+                Explore(vertexArray, a);
+
 
                 var accessableNode = new List<WeightedEdge>[Verticies];
-                for(var i =0; i < Verticies; i++)
+                for (var i = 0; i < Verticies; i++)
                 {
                     if (vertexArray[i].Explored)
                     {
@@ -272,7 +272,7 @@ namespace Addition
             public ulong Djikstras(long a, long b)
             {
                 //array which keeps track of the current shortest path for the corresponding vertex i
-                var DistanceArray = new ulong [Verticies];
+                var DistanceArray = new ulong[Verticies];
 
                 //array which keeps track of which  vertex points  has the shortest path to the corresponding vertex i
                 var PreviousVerticies = new long[Verticies];
@@ -288,7 +288,7 @@ namespace Addition
                 //shortest path checker
                 var SPT = new bool[Verticies];
 
-                for(var i =0; i< Verticies; i++)
+                for (var i = 0; i < Verticies; i++)
                 {
                     DistanceArray[i] = ulong.MaxValue; // -1 is the proxy for infinity here
 
@@ -298,7 +298,7 @@ namespace Addition
                         Distance = long.MaxValue,
                     });
 
-                    indexes[i] = i +1 ;
+                    indexes[i] = i + 1;
                 }
 
                 //make the starting point distance 0
@@ -317,7 +317,7 @@ namespace Addition
 
                 //make minHeap
                 var minHeap = new MinHeap(referenceArray, indexes);
-             
+
 
                 //need to determine which nodes are reachable first from point a and only calculate from there!
                 var accesableNodes = AccesableNodes(a);
@@ -328,7 +328,7 @@ namespace Addition
                     var nextMinNode = minHeap.getMin();
                     var nextAccesableNodes = accesableNodes[nextMinNode.Vertex];
                     SPT[nextMinNode.Vertex] = true;
-                    foreach(var node in nextAccesableNodes)
+                    foreach (var node in nextAccesableNodes)
                     {
                         if (SPT[node.EndVertex] != true)
                         {
@@ -340,16 +340,16 @@ namespace Addition
                                 DistanceArray[node.EndVertex] = distanceFromNextNode;
 
                                 //update the minHeap.
-                                minHeap.updateDistance(distanceFromNextNode,(int)node.EndVertex);
+                                minHeap.updateDistance(distanceFromNextNode, (int)node.EndVertex);
                                 //minHeap.DownShift(editedNode);
                             }
                         }
                     }
                 }
-                
+
                 //if(DistanceArray[b] != long.MaxValue)
                 //{
-                    return DistanceArray[b];
+                return DistanceArray[b];
                 //}
                 //else
                 //{
@@ -390,11 +390,11 @@ namespace Addition
             }
 
             var input2 = Array.ConvertAll(Console.ReadLine().Split(' '), c => Convert.ToInt64(c));
-            var a = input2[0]-1;
-            var b = input2[1]-1;
-            var componentCount = graphInstance.Djikstras(a,b);
+            var a = input2[0] - 1;
+            var b = input2[1] - 1;
+            var componentCount = graphInstance.Djikstras(a, b);
             //sortedGraph.Reverse();
-            if(componentCount != ulong.MaxValue)
+            if (componentCount != ulong.MaxValue)
             {
                 Console.WriteLine(componentCount);
             }
@@ -402,7 +402,7 @@ namespace Addition
             {
                 Console.WriteLine(-1);
             }
-            
+
         }
     }
 }

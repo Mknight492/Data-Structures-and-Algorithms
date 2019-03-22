@@ -34,7 +34,6 @@ namespace Addition
 
         public static bool IsConnected(List<long>[] AdjList, long a, long b, long verticesCount)
         {
-            var connected = false;
             var nodesToExplore = new Stack<long>();
 
             var vertexArray = new vertex[verticesCount + 1];
@@ -52,10 +51,6 @@ namespace Addition
 
 
             nodesToExplore.Push(a);
-            //while (nodesToExplore.Any())
-            //{
-            //    var exploringNode = nodesToExplore.Peek();
-            //    vertexArray[exploringNode].Explored = true;
             for (var i = 0; i < AdjList[a].Count; i++)
             {
                 var ConnectedVertex = AdjList[a][i];
