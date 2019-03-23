@@ -59,9 +59,11 @@
     <Compile Include="Graphs\Acyclicity.cs" />
     <Compile Include="Graphs\BFS.cs" />
     <Compile Include="Graphs\DijkstraMinHeap.cs" />
+    <Compile Include="Graphs\DisjointSets.cs" />
     <Compile Include="Graphs\Groups.cs" />
     <Compile Include="Graphs\IsBipartite.cs" />
     <Compile Include="Graphs\Isconnected.cs" />
+    <Compile Include="Graphs\NegativeCycle.cs" />
     <Compile Include="Graphs\StronglyConnectedComponents.cs" />
     <Compile Include="Graphs\TopologicalSort.cs" />
     <Compile Include="ToolBox\ArithmeticOperation.cs" />

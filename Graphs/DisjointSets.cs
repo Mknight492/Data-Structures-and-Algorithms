@@ -42,23 +42,23 @@ namespace Addition
 
                 if (root1 == root2)
                     return;
-                
-                if(root1.rank > root2.rank)
+
+                if (root1.rank > root2.rank)
                 {
                     root2.Parent = root1;
                     root1.totalTables += root2.totalTables;
                 }
                 else
                 {
-                    root1.Parent =root2;
+                    root1.Parent = root2;
                     root2.totalTables += root1.totalTables;
 
-                    if(root1.rank == root2.rank)
+                    if (root1.rank == root2.rank)
                     {
                         root2.rank++;
                     }
                 }
-                
+
             }
         }
 
@@ -75,7 +75,7 @@ namespace Addition
             var tables = new DisjointSetNode[n];
 
             long currentMax = 0;
-            for (var i  =0; i < n; i++)
+            for (var i = 0; i < n; i++)
             {
                 tables[i] = new DisjointSetNode(input2[i]);
                 if (input2[i] > currentMax)
@@ -84,11 +84,11 @@ namespace Addition
                 }
             }
 
-            
-            
+
+
             var maxValuesArray = new long[m];
 
-            for(var i =0; i < m; i++)
+            for (var i = 0; i < m; i++)
             {
                 var nextInput = Array.ConvertAll(Console.ReadLine().Split(' '), c => Convert.ToInt32(c));
                 var tableToJoin1 = nextInput[0] - 1; //-1 as 0 indexed
@@ -101,25 +101,13 @@ namespace Addition
                 maxValuesArray[i] = currentMax;
             }
 
-            for(var i = 0; i< m; i++)
+            for (var i = 0; i < m; i++)
             {
                 Console.WriteLine(maxValuesArray[i]);
             }
 
-            
-
-            //var testArr = new DisjointSetNode[10];
-            //for(var i =0; i< testArr.Length; i++)
-            //{
-            //    testArr[i] = new DisjointSetNode();
-            //}
-            //testArr[1].Union(testArr[2]);
-
-            //var b = testArr[1].Find() == testArr[2].Find();
-            //var ce = testArr[2].Find() == testArr[3].Find();
-            //var d = "hi";
         }
-        
+
     }
 }
 
