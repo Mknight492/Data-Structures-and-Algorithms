@@ -141,7 +141,8 @@ namespace Addition
 
                         if (AbleToTraverse && currentPositionInTrie.Word)
                         {
-                            Matches.Add(i);
+                                Matches.Add(i);
+                                AbleToTraverse = false;
                         }
 
                         if (currentPositionInWord + 1 < Word.Length)

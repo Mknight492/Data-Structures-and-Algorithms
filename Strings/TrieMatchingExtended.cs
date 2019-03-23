@@ -9,7 +9,7 @@ namespace Addition
 {
 
 
-    class TrieMatching
+    class TrieMatchingExtended
     {
 
         public class Nucleotide
@@ -142,6 +142,7 @@ namespace Addition
                         if (AbleToTraverse && currentPositionInTrie.Word)
                         {
                             Matches.Add(i);
+                            AbleToTraverse = false;
                         }
 
                         if (currentPositionInWord + 1 < Word.Length)
