@@ -67,6 +67,7 @@
     <Compile Include="Graphs\NegativeCycle.cs" />
     <Compile Include="Graphs\StronglyConnectedComponents.cs" />
     <Compile Include="Graphs\TopologicalSort.cs" />
+    <Compile Include="Strings\TrieMatching.cs" />
     <Compile Include="Strings\TrieTry.cs" />
     <Compile Include="ToolBox\ArithmeticOperation.cs" />
     <Compile Include="ToolBox\KnapSackDiscrete.cs" />

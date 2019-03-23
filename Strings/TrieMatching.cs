@@ -11,7 +11,7 @@ namespace Addition
 
     class Program
     {
-       
+
         public class Nucleotide
         {
             public Nucleotide A { get; set; }
@@ -32,16 +32,16 @@ namespace Addition
             private Nucleotide baseOfTrie = new Nucleotide(0);
             private int count = 0;
 
-            public void Add(char[]  WordToAdd)
+            public void Add(char[] WordToAdd)
             {
                 var currentElement = baseOfTrie;
 
-                for(var i = 0; i < WordToAdd.Length; i++)
+                for (var i = 0; i < WordToAdd.Length; i++)
                 {
                     switch (WordToAdd[i])
                     {
                         case 'A':
-                            if(currentElement.A == null)
+                            if (currentElement.A == null)
                             {
                                 count++;
                                 currentElement.A = new Nucleotide(count);
@@ -69,7 +69,7 @@ namespace Addition
                             {
                                 count++;
                                 currentElement.C = new Nucleotide(count);
-                                currentElement = currentElement.C;                             
+                                currentElement = currentElement.C;
                             }
                             else
                             {
@@ -89,11 +89,11 @@ namespace Addition
                             }
                             break;
                     }
-                    if(i == WordToAdd.Length - 1)
+                    if (i == WordToAdd.Length - 1)
                     {
                         currentElement.Word = true;
                     }
-                    
+
                 }
             }
 
@@ -102,7 +102,7 @@ namespace Addition
 
                 var Matches = new List<int>();
 
-                for(var i =0; i< Word.Length; i++)
+                for (var i = 0; i < Word.Length; i++)
                 {
                     var currentPositionInTrie = baseOfTrie;
                     var currentPositionInWord = i;
@@ -122,7 +122,7 @@ namespace Addition
                                 if (currentPositionInTrie.T == null)
                                     AbleToTraverse = false;
                                 else
-                                    currentPositionInTrie = currentPositionInTrie.T;   
+                                    currentPositionInTrie = currentPositionInTrie.T;
                                 break;
                             case 'C':
                                 if (currentPositionInTrie.C == null)
@@ -167,7 +167,7 @@ namespace Addition
 
             var trieInstance = new Trie<Nucleotide>();
 
-            for(var i =0; i< numberOfStrings; i++)
+            for (var i = 0; i < numberOfStrings; i++)
             {
                 var Pattern = Console.ReadLine().ToCharArray();
                 trieInstance.Add(Pattern);
@@ -176,10 +176,10 @@ namespace Addition
             var matches = trieInstance.CheckWord(StringToTest);
             //var matchesAsString = matches.ConvertAll(x => x.ToString()).ToArray();
             Console.WriteLine(string.Join(" ", matches));
-           
+
 
         }
-        
+
     }
 }
 
