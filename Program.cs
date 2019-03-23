@@ -11,16 +11,18 @@ namespace Addition
 
     class Program
     {
+       
+        //
+
+
         public class DisjointSetNode
         {
             public DisjointSetNode Parent { get; set; }
             public uint rank { get; set; }
-            public long totalTables { get; set; }
 
-            public DisjointSetNode(long initalNumberOfTables)
+            public DisjointSetNode()
             {
                 Parent = this;
-                totalTables = initalNumberOfTables;
             }
 
             public DisjointSetNode Find()
@@ -46,12 +48,10 @@ namespace Addition
                 if(root1.rank > root2.rank)
                 {
                     root2.Parent = root1;
-                    root1.totalTables += root2.totalTables;
                 }
                 else
                 {
                     root1.Parent =root2;
-                    root2.totalTables += root1.totalTables;
 
                     if(root1.rank == root2.rank)
                     {
@@ -63,50 +63,216 @@ namespace Addition
         }
 
 
-        static void Main(string[] args)
+
+
+
+
+
+
+        public class WeightedEdge
         {
-            var input = Array.ConvertAll(Console.ReadLine().Split(' '), c => Convert.ToInt64(c));
-            long n = input[0]; //number of tables
-            var m = input[1]; //number of merge queries
+            public long EndVertex { get; set; }
+            public ulong weight { get; set; }
+        }
 
-            var input2 = Array.ConvertAll(Console.ReadLine().Split(' '), c => Convert.ToInt64(c));
+        public class vertex
+        {
+            public int value { get; set; }
+            public bool Explored { get; set; }
+        }
 
+        public class Graph
+        {
+            private long Verticies;
+            private List<WeightedEdge>[] Adj;
+            private List<WeightedEdge>[] ReversedAdj;
 
-            var tables = new DisjointSetNode[n];
-
-            long currentMax = 0;
-            for (var i  =0; i < n; i++)
+            public Graph(long verticies)
             {
-                tables[i] = new DisjointSetNode(input2[i]);
-                if (input2[i] > currentMax)
+                Verticies = verticies;
+
+                Adj = new List<WeightedEdge>[verticies];
+                ReversedAdj = new List<WeightedEdge>[verticies];
+
+                for (long i = 0; i < verticies; i++)
                 {
-                    currentMax = input2[i];
+                    Adj[i] = new List<WeightedEdge>();
+                    ReversedAdj[i] = new List<WeightedEdge>();
                 }
             }
 
-            
-            
-            var maxValuesArray = new long[m];
-
-            for(var i =0; i < m; i++)
+            public void AddDirectedEdge(long source, WeightedEdge data)
             {
-                var nextInput = Array.ConvertAll(Console.ReadLine().Split(' '), c => Convert.ToInt32(c));
-                var tableToJoin1 = nextInput[0] - 1; //-1 as 0 indexed
-                var tableToJoin2 = nextInput[1] - 1;
+                if (!Adj[source].Contains(data))
+                    Adj[source].Add(data);
 
-                tables[tableToJoin1].Union(tables[tableToJoin2]);
-                var maxOfJoinedTables = tables[tableToJoin1].Find().totalTables;
-
-                currentMax = (maxOfJoinedTables > currentMax) ? maxOfJoinedTables : currentMax;
-                maxValuesArray[i] = currentMax;
             }
 
-            for(var i = 0; i< m; i++)
+            public void AddUndirectedEdge(long source, WeightedEdge data)
             {
-                Console.WriteLine(maxValuesArray[i]);
+                if (!Adj[source].Contains(data))
+                    Adj[source].Add(data);
             }
 
-            
+
+            public void Explore(vertex[] vertexArray, long currentNode)
+            {
+                vertexArray[currentNode].Explored = true;
+                var accessableNodes = Adj[currentNode];
+                for (var i = 0; i < accessableNodes.Count; i++)
+                {
+                    if (!vertexArray[accessableNodes[i].EndVertex].Explored)
+                    {
+                        Explore(vertexArray, vertexArray[accessableNodes[i].EndVertex].value);
+                    }
+                }
+            }
+
+            public List<WeightedEdge>[] AccesableNodes(long a)
+            {
+                var nodesToExplore = new Stack<long>();
+
+                var vertexArray = new vertex[Verticies];
+
+                for (var i = 0; i < Verticies; i++)
+                {
+                    vertexArray[i] = new vertex
+                    {
+                        value = i,
+                        Explored = false
+                    };
+                }
+
+                Explore(vertexArray, a);
+
+
+                var accessableNode = new List<WeightedEdge>[Verticies];
+                for (var i = 0; i < Verticies; i++)
+                {
+                    if (vertexArray[i].Explored)
+                    {
+                        accessableNode[i] = Adj[i];
+                    }
+                    else
+                    {
+                        accessableNode[i] = new List<WeightedEdge>();
+                    }
+                }
+                return accessableNode;
+            }
+
+
+
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        public static double ShortestSpanningPath(List<Edge> ListOfEdges,int numberOfPoints)
+        {
+            var SetArray = new DisjointSetNode[numberOfPoints];
+
+            for(var i =0; i<numberOfPoints; i++)
+            {
+                SetArray[i] = new DisjointSetNode();
+            }
+
+            double total = 0;
+
+            for(var i =0; i< ListOfEdges.Count(); i++)
+            {
+                var currentEdge = ListOfEdges[i];
+                var LSidedSet = SetArray[currentEdge.StartingV].Find();
+                var RSidedSet = SetArray[currentEdge.FinishingV].Find();
+
+                if(LSidedSet != RSidedSet)
+                {
+                    total += currentEdge.Weight;
+                    LSidedSet.Union(RSidedSet);
+                }
+            }
+            return total;
+        }
+
+
+
+
+
+
+
+
+        public class Point
+        {
+            public int PointA { get; set; }
+            public int PointB { get; set; }
+        }
+
+        public class Edge
+        {
+            public int StartingV { get; set; }
+            public int FinishingV { get; set; }
+            public double Weight { get; set; }
+        }
+
+        static void Main(string[] args)
+        {
+            //determine the number of points
+            var numberOfPoints = Convert.ToInt32(Console.ReadLine());
+
+            //make an array of points and read in the points from the console
+            var pointsArray = new Point[numberOfPoints];
+
+            for (var i  =0; i < numberOfPoints; i++)
+            {
+                var pointInput = Array.ConvertAll(Console.ReadLine().Split(' '), c => Convert.ToInt32(c));
+                pointsArray[i] = new Point
+                {
+                    PointA = pointInput[0],
+                    PointB = pointInput[1]
+                };
+            }
+
+            //make a graph with the number of points
+
+            var graphInstance = new Graph(numberOfPoints);
+
+            //generate all possible Edges
+
+            var ListOfEdges = new List<Edge>();
+            for(var i = 0; i< numberOfPoints; i++)
+            {
+                for( var j =i+1; j< numberOfPoints; j++)
+                {
+
+                    var xSquared =Math.Pow(pointsArray[i].PointA - pointsArray[j].PointA, 2);
+                    var ySquared = Math.Pow(pointsArray[i].PointB - pointsArray[j].PointB, 2);
+                    var EdgeWeight = Math.Sqrt(xSquared + ySquared);
+
+                    ListOfEdges.Add(new Edge
+                    {
+                        StartingV = i,
+                        FinishingV = j,
+                        Weight = EdgeWeight 
+                    });
+                }
+            }
+
+            ListOfEdges = ListOfEdges.OrderBy(x => x.Weight).ToList();
+
+
+            var Path = ShortestSpanningPath(ListOfEdges, numberOfPoints);
+            Console.WriteLine(Math.Round(Path,9));
 
             //var testArr = new DisjointSetNode[10];
             //for(var i =0; i< testArr.Length; i++)

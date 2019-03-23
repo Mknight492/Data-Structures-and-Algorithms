@@ -9,7 +9,7 @@ namespace Addition
 {
 
 
-    class Program
+    class DisJointSets
     {
         public class DisjointSetNode
         {
@@ -63,50 +63,50 @@ namespace Addition
         }
 
 
-        static void Main(string[] args)
-        {
-            var input = Array.ConvertAll(Console.ReadLine().Split(' '), c => Convert.ToInt64(c));
-            long n = input[0]; //number of tables
-            var m = input[1]; //number of merge queries
+        //static void Main(string[] args)
+        //{
+        //    var input = Array.ConvertAll(Console.ReadLine().Split(' '), c => Convert.ToInt64(c));
+        //    long n = input[0]; //number of tables
+        //    var m = input[1]; //number of merge queries
 
-            var input2 = Array.ConvertAll(Console.ReadLine().Split(' '), c => Convert.ToInt64(c));
-
-
-            var tables = new DisjointSetNode[n];
-
-            long currentMax = 0;
-            for (var i = 0; i < n; i++)
-            {
-                tables[i] = new DisjointSetNode(input2[i]);
-                if (input2[i] > currentMax)
-                {
-                    currentMax = input2[i];
-                }
-            }
+        //    var input2 = Array.ConvertAll(Console.ReadLine().Split(' '), c => Convert.ToInt64(c));
 
 
+        //    var tables = new DisjointSetNode[n];
 
-            var maxValuesArray = new long[m];
+        //    long currentMax = 0;
+        //    for (var i = 0; i < n; i++)
+        //    {
+        //        tables[i] = new DisjointSetNode(input2[i]);
+        //        if (input2[i] > currentMax)
+        //        {
+        //            currentMax = input2[i];
+        //        }
+        //    }
 
-            for (var i = 0; i < m; i++)
-            {
-                var nextInput = Array.ConvertAll(Console.ReadLine().Split(' '), c => Convert.ToInt32(c));
-                var tableToJoin1 = nextInput[0] - 1; //-1 as 0 indexed
-                var tableToJoin2 = nextInput[1] - 1;
 
-                tables[tableToJoin1].Union(tables[tableToJoin2]);
-                var maxOfJoinedTables = tables[tableToJoin1].Find().totalTables;
 
-                currentMax = (maxOfJoinedTables > currentMax) ? maxOfJoinedTables : currentMax;
-                maxValuesArray[i] = currentMax;
-            }
+        //    var maxValuesArray = new long[m];
 
-            for (var i = 0; i < m; i++)
-            {
-                Console.WriteLine(maxValuesArray[i]);
-            }
+        //    for (var i = 0; i < m; i++)
+        //    {
+        //        var nextInput = Array.ConvertAll(Console.ReadLine().Split(' '), c => Convert.ToInt32(c));
+        //        var tableToJoin1 = nextInput[0] - 1; //-1 as 0 indexed
+        //        var tableToJoin2 = nextInput[1] - 1;
 
-        }
+        //        tables[tableToJoin1].Union(tables[tableToJoin2]);
+        //        var maxOfJoinedTables = tables[tableToJoin1].Find().totalTables;
+
+        //        currentMax = (maxOfJoinedTables > currentMax) ? maxOfJoinedTables : currentMax;
+        //        maxValuesArray[i] = currentMax;
+        //    }
+
+        //    for (var i = 0; i < m; i++)
+        //    {
+        //        Console.WriteLine(maxValuesArray[i]);
+        //    }
+
+        //}
 
     }
 }
