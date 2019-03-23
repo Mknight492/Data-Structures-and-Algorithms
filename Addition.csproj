@@ -63,9 +63,11 @@
     <Compile Include="Graphs\Groups.cs" />
     <Compile Include="Graphs\IsBipartite.cs" />
     <Compile Include="Graphs\Isconnected.cs" />
+    <Compile Include="Graphs\Kuskals.cs" />
     <Compile Include="Graphs\NegativeCycle.cs" />
     <Compile Include="Graphs\StronglyConnectedComponents.cs" />
     <Compile Include="Graphs\TopologicalSort.cs" />
+    <Compile Include="Strings\TrieTry.cs" />
     <Compile Include="ToolBox\ArithmeticOperation.cs" />
     <Compile Include="ToolBox\KnapSackDiscrete.cs" />
     <Compile Include="ToolBox\minSubString.cs" />

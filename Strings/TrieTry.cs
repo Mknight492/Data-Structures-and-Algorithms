@@ -9,9 +9,9 @@ namespace Addition
 {
 
 
-    class Program
+    class NucleotideTrie
     {
-       
+
         public class Nucleotide
         {
             public Nucleotide A { get; set; }
@@ -32,16 +32,16 @@ namespace Addition
             private Nucleotide baseOfTrie = new Nucleotide(0);
             private int count = 0;
 
-            public void Add(char[]  WordToAdd)
+            public void Add(char[] WordToAdd)
             {
                 var currentElement = baseOfTrie;
 
-                for(var i = 0; i < WordToAdd.Length; i++)
+                for (var i = 0; i < WordToAdd.Length; i++)
                 {
                     switch (WordToAdd[i])
                     {
                         case 'A':
-                            if(currentElement.A == null)
+                            if (currentElement.A == null)
                             {
                                 count++;
                                 currentElement.A = new Nucleotide(count);
@@ -69,7 +69,7 @@ namespace Addition
                             {
                                 count++;
                                 currentElement.C = new Nucleotide(count);
-                                currentElement = currentElement.C;                             
+                                currentElement = currentElement.C;
                             }
                             else
                             {
@@ -89,18 +89,18 @@ namespace Addition
                             }
                             break;
                     }
-                    if(i == WordToAdd.Length - 1)
+                    if (i == WordToAdd.Length - 1)
                     {
                         currentElement.Word = true;
                     }
-                    
+
                 }
             }
 
             public void Log()
             {
 
-                if(baseOfTrie.A != null)
+                if (baseOfTrie.A != null)
                 {
                     Console.WriteLine(baseOfTrie.ID + "->" + baseOfTrie.A.ID + ":A");
                     LogR(baseOfTrie.A);
@@ -151,21 +151,21 @@ namespace Addition
 
 
 
-        static void Main(string[] args)
-        {
-            var numberOfStrings = Convert.ToInt32(Console.ReadLine());
+        //static void Main(string[] args)
+        //{
+        //    var numberOfStrings = Convert.ToInt32(Console.ReadLine());
 
-            var trieInstance = new Trie<Nucleotide>();
+        //    var trieInstance = new Trie<Nucleotide>();
 
-            for(var i =0; i< numberOfStrings; i++)
-            {
-                var NextWord = Console.ReadLine().ToCharArray();
-                trieInstance.Add(NextWord);
-            }
-            trieInstance.Log();
+        //    for (var i = 0; i < numberOfStrings; i++)
+        //    {
+        //        var NextWord = Console.ReadLine().ToCharArray();
+        //        trieInstance.Add(NextWord);
+        //    }
+        //    trieInstance.Log();
 
-        }
-        
+        //}
+
     }
 }
 
