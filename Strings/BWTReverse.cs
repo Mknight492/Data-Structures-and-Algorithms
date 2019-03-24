@@ -9,10 +9,10 @@ namespace Addition
 {
 
 
-    class Program
+    class BWTInverseClass
     {
-       
-        public static  string BWTInverse(char[] Word)
+
+        public static string BWTInverse(char[] Word)
         {
             var CurrentCountByLetter = new int[Word.Length];
 
@@ -22,10 +22,10 @@ namespace Addition
             var TCount = 0;
 
             //counting sort for each of the possible letters
-            for(var i =0; i<Word.Length; i++)
+            for (var i = 0; i < Word.Length; i++)
             {
                 if (Word[i] == 'A')
-                { 
+                {
                     CurrentCountByLetter[i] = ACount;
                     ACount++;
                 }
@@ -47,10 +47,8 @@ namespace Addition
 
             }
             //add the preceeding letters to each counting sort
-            //this determines their last location in the Array.
-            //CCount += ACount;
-            //GCount += CCount;
-            //TCount += GCount;
+            //this determines their first location in the Array.
+
             var firstA = 1;
             var firstC = ACount + 1;
             var firstG = ACount + CCount + 1;
@@ -61,21 +59,15 @@ namespace Addition
             var CharArrayToRet = new char[Word.Length];
 
             CharArrayToRet[0] = Word[0];
-            //for(var i=0; i<Word.Length; i++)
-            //{
 
-            //    CharArrayToRet[i] = BWTStringMatrix[i][Word.Length - 1];
-            //    //Console.WriteLine(BWTStringMatrix[i].ToString());
-            //}
-            
             var nextLetter = Word[0];
             var nextLetterCount = 0;
             var letterCount = 1;
 
             while (letterCount < Word.Length)
             {
-               
-                if(nextLetter == 'A')
+
+                if (nextLetter == 'A')
                 {
                     nextLetter = Word[firstA + nextLetterCount];
                     nextLetterCount = CurrentCountByLetter[firstA + nextLetterCount];
@@ -106,15 +98,13 @@ namespace Addition
 
 
 
-        static void Main(string[] args)
-        {
-            var InputString = Console.ReadLine().ToCharArray();
+        //static void Main(string[] args)
+        //{
+        //    var InputString = Console.ReadLine().ToCharArray();
 
-            Console.WriteLine(BWTInverse(InputString) + "$");
-              
+        //    Console.WriteLine(BWTInverse(InputString) + "$");
+        //}
 
-        }
-        
     }
 }
 

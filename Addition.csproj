@@ -67,6 +67,8 @@
     <Compile Include="Graphs\NegativeCycle.cs" />
     <Compile Include="Graphs\StronglyConnectedComponents.cs" />
     <Compile Include="Graphs\TopologicalSort.cs" />
+    <Compile Include="Strings\BurrowsWheelerTransformation.cs" />
+    <Compile Include="Strings\BWTReverse.cs" />
     <Compile Include="Strings\constructingSuffixTree.cs" />
     <Compile Include="Strings\TrieMatching.cs" />
     <Compile Include="Strings\TrieMatchingExtended.cs" />
