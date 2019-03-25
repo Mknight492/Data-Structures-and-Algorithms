@@ -11,68 +11,140 @@ namespace Addition
 
     class Program
     {
+        public enum NucleoTide {A,C,G,T}
 
-        public static int[] BorderCalc(char[] Pattern)
+        public static char[]  CountingSort(char[] InputStr)
         {
-            var BorderArray = new int[Pattern.Length];
+            var enumCount = Enum.GetValues(typeof(NucleoTide)).Length;
 
-            BorderArray[0] = 0;
+            var countArr = new int[enumCount];
 
-            var CurrentBorderLength = 0;
-
-            for (var i = 1; i < Pattern.Length; i++)
+            for(var i = 0; i< InputStr.Length-1; i++)
             {
-                if (Pattern[CurrentBorderLength] == Pattern[i])
+                //NucleoTide myNucleoTide;
+                var res= Enum.TryParse(InputStr[i].ToString(), out NucleoTide myNucleotide);
+
+                if (!res)
                 {
-                    CurrentBorderLength++;
-
+                    throw new Exception("invalid Character in string");
                 }
-                else
-                {
-                    while (CurrentBorderLength > 0 && Pattern[CurrentBorderLength] != Pattern[i])
-                    {
-                        CurrentBorderLength = BorderArray[CurrentBorderLength-1];
-                    }
-                    if (Pattern[i] == Pattern[CurrentBorderLength])
-                        CurrentBorderLength++;
-                }
-                
 
-                BorderArray[i] = CurrentBorderLength;
-
+                var myNucleoTideInt = (int)myNucleotide;
+                countArr[myNucleoTideInt]++;
             }
 
-            return BorderArray;
+            var sortArr = new char[InputStr.Length];
+            sortArr[0] = '$';
+
+            var currentLetterCount = 1;
+            for(var i = 0; i< countArr.Length; i++)
+            {
+                while (countArr[i] > 0)
+                {
+                    NucleoTide currentLetter = (NucleoTide)i;
+                    var nucAsChar =currentLetter.ToString()[0];
+                    sortArr[currentLetterCount] = nucAsChar;
+                    currentLetterCount++;
+                    countArr[i]--;
+                }
+            }
+
+
+            return sortArr ;
         }
 
+        //NB both CalcOrder and Sorting could be done in One Step and require one less interation through the input Str
+        //These havve been calculated separately for clarity sake however could be refactored
+        //the Length of each Occurance Array would then subsitute the Count vars.
 
-          
-        public static List<int> KnuthMorrisPratt(char[] Pattern, char[] StringToCheck)
+        public static int[] CalcOrder(char[] unsortedStr)
         {
-            var Breaker = new char[1] { '$' };
-            var CombinedArray = Pattern.Concat(Breaker).Concat(StringToCheck).ToArray();
 
-            var borderArray = BorderCalc(CombinedArray);
+            var enumCount = Enum.GetValues(typeof(NucleoTide)).Length;
 
-            var Matches = new List<int>();
-
-
-            for (var i = Pattern.Length +1; i< CombinedArray.Length; i++)
+            var PositionQueues = new Queue<int>[enumCount];
+            for(var i =0; i< enumCount; i++)
             {
-                if(borderArray[i] != 0 && borderArray[i] % Pattern.Length == 0)
+                PositionQueues[i] = new Queue<int>();
+            }
+        
+
+            //for SortStr.Length-1 as las char will be $
+            for (var i = 0; i < unsortedStr.Length - 1; i++)
+            {
+                var res = Enum.TryParse(unsortedStr[i].ToString(), out NucleoTide myNucleotide);
+
+                if (!res)
                 {
-                    Matches.Add(i - (Pattern.Length * 2));
+                    throw new Exception("invalid Character in string");
                 }
+
+                var myNucleoTideInt = (int)myNucleotide;
+                PositionQueues[myNucleoTideInt].Enqueue(i);
             }
 
-            return Matches;
+            var OrderArray = new int[unsortedStr.Length];
+            //first letter will be the $ from the end of the string
+            OrderArray[0] = unsortedStr.Length - 1;
+            var CurrentLetterCount = 1;
+            for (var i = 0; i < PositionQueues.Length; i++)
+            {
+                while (PositionQueues[i].Any())
+                {
+                    OrderArray[CurrentLetterCount] =PositionQueues[i].Dequeue();
+                    CurrentLetterCount++;
+                }
+
+            }
+            return OrderArray;
         }
         
+    
+        
+
+        public static int[] CalulateClass(char[] sortedStr, int[] Order)
+        {
+            var ClassArr = new int[sortedStr.Length];
+
+           
+            char CurrentLetter = '$';
+            var currentClass = 0;
+            for(var i=0; i< sortedStr.Length; i++)
+            {
+                //find the position of the current letter in the unsorted string using the orderArray;
+                var Position = Order[i];
+
+                //move through the sorted string, each time the letter changes increase the currentClass count;
+                //and update the current Letter
+                if(CurrentLetter != sortedStr[i])
+                {
+                    CurrentLetter = sortedStr[i];
+                    currentClass++;
+                }
+
+                ClassArr[Position] = currentClass;
+
+            }
+
+            return ClassArr;
+        }
+
+
+
+        public static int[] StrToSuffixArr(char[] InputStr)
+        {
+            return new int[0];
+        }
+
 
 
         static void Main(string[] args)
         {
-
+            var str = new Char[] { 'A', 'C', 'A', 'C','A', 'A', '$' };
+            var SortedStr2 = CountingSort(str);
+            var OrderArr2 = CalcOrder(str);
+            var ClassArr = CalulateClass(SortedStr2, OrderArr2);
+            char G = 'G';
             //var cycles = 0;
             //while (true)
             //{
@@ -95,23 +167,6 @@ namespace Addition
             //            letterArray[i] = 'T';
             //    }
 
-            //    for (var i = 0; i < patternArray.Length; i++)
-            //    {
-            //        var nextLetter = randInst.Next(0, 3);
-            //        if (nextLetter == 0)
-            //            patternArray[i] = 'A';
-            //        if (nextLetter == 1)
-            //            patternArray[i] = 'C';
-            //        if (nextLetter == 2)
-            //            patternArray[i] = 'G';
-            //        if (nextLetter == 3)
-            //            patternArray[i] = 'T';
-            //    }
-
-            //    var matchesViaKMPImplimentation = KnuthMorrisPratt(patternArray, letterArray);
-
-            //    var matchesViaNaiveAlg = NaiveMatching( patternArray, letterArray);
-
 
             //    if(matchesViaNaiveAlg.Count != matchesViaKMPImplimentation.Count)
             //    {
@@ -129,18 +184,13 @@ namespace Addition
             //    cycles++;
 
             //}
-        
-            var Pattern = Console.ReadLine().ToCharArray();
 
             var InputString = Console.ReadLine().ToCharArray();
 
-            var BorderArray = BorderCalc(Pattern);
+            var SuffixArray = StrToSuffixArr(InputString);
 
 
-            var Occurrences = KnuthMorrisPratt(Pattern, InputString);
-
-
-            Console.WriteLine(string.Join(" ", Occurrences));
+            Console.WriteLine(string.Join(" ", SuffixArray));
         }
 
 
