@@ -69,6 +69,7 @@
     <Compile Include="Graphs\TopologicalSort.cs" />
     <Compile Include="Strings\BurrowsWheelerTransformation.cs" />
     <Compile Include="Strings\BWTReverse.cs" />
+    <Compile Include="Strings\BWTSortFail.cs" />
     <Compile Include="Strings\constructingSuffixTree.cs" />
     <Compile Include="Strings\TrieMatching.cs" />
     <Compile Include="Strings\TrieMatchingExtended.cs" />
