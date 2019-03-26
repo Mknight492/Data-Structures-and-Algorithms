@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 
-namespace Addition.Helpers
+
+namespace Addition
 {
-    class countingSortMisc
+
+
+    class ConstructingSuffixArray
     {
         public static char[] CountingSort(char[] InputStr)
         {
@@ -136,5 +139,132 @@ namespace Addition.Helpers
             }
             return OrderArray;
         }
+
+
+
+
+        public static int[] CalulateClass(char[] sortedStr, int[] Order)
+        {
+            var ClassArr = new int[sortedStr.Length];
+
+
+            char CurrentLetter = '$';
+            var currentClass = 0;
+            for (var i = 0; i < sortedStr.Length; i++)
+            {
+                //find the position of the current letter in the unsorted string using the orderArray;
+                var Position = Order[i];
+
+                //move through the sorted string, each time the letter changes increase the currentClass count;
+                //and update the current Letter
+                if (CurrentLetter != sortedStr[i])
+                {
+                    CurrentLetter = sortedStr[i];
+                    currentClass++;
+                }
+
+                ClassArr[Position] = currentClass;
+
+            }
+
+            return ClassArr;
+        }
+
+
+        public static int[] SortDoubled(char[] unsortedStr, int L, int[] Order, int[] Class)
+        {
+            var WrdLngth = unsortedStr.Length;
+
+            var CountArr = new int[WrdLngth];
+
+            var newOrder = new int[WrdLngth];
+
+            //perform a counting sort of the classes
+            for (var i = 0; i < WrdLngth; i++)
+            {
+                CountArr[Class[i]]++;
+            }
+
+            //compute partial sums of count arrays
+            for (var i = 1; i < WrdLngth; i++)
+            {
+                CountArr[i] += CountArr[i - 1];
+            }
+
+            for (var i = WrdLngth - 1; i >= 0; i--)
+            {
+                var start = (Order[i] - L + WrdLngth) % WrdLngth;
+
+                var curClass = Class[start];
+
+                CountArr[curClass]--;
+
+                newOrder[CountArr[curClass]] = start;
+            }
+
+            return newOrder;
+        }
+
+        public static int[] UpdateClasses(int[] newOrder, int[] Class, int L)
+        {
+            var WrdLng = newOrder.Length;
+
+            var newClass = new int[WrdLng];
+
+            var startingPos = newOrder[0];
+
+            newClass[startingPos] = 0;
+
+            for (var i = 1; i < WrdLng; i++)
+            {
+                var cur = newOrder[i];
+                var prev = newOrder[i - 1];
+
+                var mid = (cur + L) % WrdLng;
+                var midPrev = (prev + L) % WrdLng;
+
+                if (Class[cur] != Class[prev] || Class[mid] != Class[midPrev])
+                    newClass[cur] = newClass[prev] + 1;
+                else
+                    newClass[cur] = newClass[prev];
+            }
+            return newClass;
+        }
+
+
+        public static int[] StrToSuffixArr(char[] InputStr)
+        {
+            var wrdLng = InputStr.Length;
+            var SortedStr = CountingSort(InputStr);
+            var OrderArr = CalcOrder(InputStr);
+            var ClassArr = CalulateClass(SortedStr, OrderArr);
+            var L = 1;
+
+            while (L < wrdLng)
+            {
+                OrderArr = SortDoubled(InputStr, L, OrderArr, ClassArr);
+                ClassArr = UpdateClasses(OrderArr, ClassArr, L);
+                L *= 2;
+            }
+
+
+
+            return OrderArr;
+        }
+
+
+
+        //static void Main(string[] args)
+        //{
+        //    var InputString = Console.ReadLine().ToCharArray();
+
+        //    var SuffixArray = StrToSuffixArr(InputString);
+
+        //    Console.WriteLine(string.Join(" ", SuffixArray));
+        //}
     }
 }
+
+
+
+

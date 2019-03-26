@@ -67,10 +67,12 @@
     <Compile Include="Graphs\NegativeCycle.cs" />
     <Compile Include="Graphs\StronglyConnectedComponents.cs" />
     <Compile Include="Graphs\TopologicalSort.cs" />
+    <Compile Include="Helpers\countingSortEnums.cs" />
     <Compile Include="Helpers\countingSortMisc.cs" />
     <Compile Include="Strings\BurrowsWheelerTransformation.cs" />
     <Compile Include="Strings\BWTReverse.cs" />
     <Compile Include="Strings\BWTSort.cs" />
+    <Compile Include="Strings\ConstructingSuffixArrayNlogN.cs" />
     <Compile Include="Strings\constructingSuffixTree.cs" />
     <Compile Include="Strings\KnuthMorrisPratt.cs" />
     <Compile Include="Strings\TrieMatching.cs" />
