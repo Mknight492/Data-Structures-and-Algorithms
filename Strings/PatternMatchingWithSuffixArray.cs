@@ -9,7 +9,7 @@ namespace Addition
 {
 
 
-    class Program
+    class PatternMatchingWithSuffixArray
     {
         public static char[] CountingSort(char[] InputStr)
         {
@@ -147,17 +147,17 @@ namespace Addition
         {
             var ClassArr = new int[sortedStr.Length];
 
-           
-            char CurrentLetter = '$'; 
+
+            char CurrentLetter = '$';
             var currentClass = 0;
-            for(var i=0; i< sortedStr.Length; i++)
+            for (var i = 0; i < sortedStr.Length; i++)
             {
                 //find the position of the current letter in the unsorted string using the orderArray;
                 var Position = Order[i];
 
                 //move through the sorted string, each time the letter changes increase the currentClass count;
                 //and update the current Letter
-                if(CurrentLetter != sortedStr[i])
+                if (CurrentLetter != sortedStr[i])
                 {
                     CurrentLetter = sortedStr[i];
                     currentClass++;
@@ -180,18 +180,18 @@ namespace Addition
             var newOrder = new int[WrdLngth];
 
             //perform a counting sort of the classes
-            for(var i = 0; i < WrdLngth; i++)
+            for (var i = 0; i < WrdLngth; i++)
             {
                 CountArr[Class[i]]++;
             }
-            
+
             //compute partial sums of count arrays
-            for(var i=1; i <WrdLngth; i++)
+            for (var i = 1; i < WrdLngth; i++)
             {
                 CountArr[i] += CountArr[i - 1];
             }
 
-            for(var i = WrdLngth-1; i>=0; i--)
+            for (var i = WrdLngth - 1; i >= 0; i--)
             {
                 var start = (Order[i] - L + WrdLngth) % WrdLngth;
 
@@ -215,7 +215,7 @@ namespace Addition
 
             newClass[startingPos] = 0;
 
-            for( var i = 1; i<WrdLng; i++)
+            for (var i = 1; i < WrdLng; i++)
             {
                 var cur = newOrder[i];
                 var prev = newOrder[i - 1];
@@ -259,7 +259,7 @@ namespace Addition
 
             var BWTString = new char[WrdLng];
 
-            for(var i=0; i< WrdLng; i++)
+            for (var i = 0; i < WrdLng; i++)
             {
                 var indexInStr = (SuffixArray[i] + WrdLng - 1) % WrdLng;
                 BWTString[i] = InputStr[indexInStr];
@@ -268,7 +268,7 @@ namespace Addition
             return BWTString;
         }
 
-        public static List<int> BWTMatching(char[] Word, char[][] Patterns, int[]SuffixArray)
+        public static List<int> BWTMatching(char[] Word, char[][] Patterns, int[] SuffixArray)
         {
             //initalisse counting sort arrays
             var AcountArray = new int[Word.Length];
@@ -349,16 +349,16 @@ namespace Addition
                 {
                     if (currentLetter == 'A')
                         foreach (var index in AIndexArray)
-                            setOfMatches.Add(SuffixArray[index]-1);
+                            setOfMatches.Add(SuffixArray[index] - 1);
                     else if (currentLetter == 'C')
                         foreach (var index in CIndexArray)
-                            setOfMatches.Add(SuffixArray[index]-1);
+                            setOfMatches.Add(SuffixArray[index] - 1);
                     else if (currentLetter == 'G')
                         foreach (var index in GIndexArray)
-                            setOfMatches.Add(SuffixArray[index]-1);
+                            setOfMatches.Add(SuffixArray[index] - 1);
                     else if (currentLetter == 'T')
                         foreach (var index in TIndexArray)
-                            setOfMatches.Add(SuffixArray[index]-1);
+                            setOfMatches.Add(SuffixArray[index] - 1);
                 }
                 else
                 {
@@ -456,8 +456,8 @@ namespace Addition
 
                         if (i == 0 && !NoMatches)
                         {
-                            for(var k= currentMin; k<=currentMax; k++ )
-                            setOfMatches.Add(SuffixArray[k]);
+                            for (var k = currentMin; k <= currentMax; k++)
+                                setOfMatches.Add(SuffixArray[k]);
                         }
                     }
                 }
@@ -472,28 +472,28 @@ namespace Addition
 
 
 
-        static void Main(string[] args)
-        {
-            var InputString = (Console.ReadLine() + "$").ToCharArray();
+        //static void Main(string[] args)
+        //{
+        //    var InputString = (Console.ReadLine() + "$").ToCharArray();
 
-            var SuffixArray = StrToSuffixArr(InputString);
+        //    var SuffixArray = StrToSuffixArr(InputString);
 
-            var BWTString = SuffixArrToBWTStr(SuffixArray, InputString);
+        //    var BWTString = SuffixArrToBWTStr(SuffixArray, InputString);
 
-            var numberOfPatterns = Convert.ToInt32(Console.ReadLine());
+        //    var numberOfPatterns = Convert.ToInt32(Console.ReadLine());
 
-            var Patterns = new char[numberOfPatterns][];
+        //    var Patterns = new char[numberOfPatterns][];
 
 
-            var ArrayOfPattern = Console.ReadLine().Split(' ');
-            for(var i = 0; i< numberOfPatterns; i++)
-            {
-                Patterns[i] = ArrayOfPattern[i].ToCharArray();
-            }
+        //    var ArrayOfPattern = Console.ReadLine().Split(' ');
+        //    for (var i = 0; i < numberOfPatterns; i++)
+        //    {
+        //        Patterns[i] = ArrayOfPattern[i].ToCharArray();
+        //    }
 
-            var matches = BWTMatching(BWTString, Patterns, SuffixArray);
-            Console.WriteLine(string.Join(" ", matches));
-        }  
+        //    var matches = BWTMatching(BWTString, Patterns, SuffixArray);
+        //    Console.WriteLine(string.Join(" ", matches));
+        //}
     }
 }
 

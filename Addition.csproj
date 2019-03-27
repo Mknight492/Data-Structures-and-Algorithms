@@ -75,6 +75,7 @@
     <Compile Include="Strings\ConstructingSuffixArrayNlogN.cs" />
     <Compile Include="Strings\constructingSuffixTree.cs" />
     <Compile Include="Strings\KnuthMorrisPratt.cs" />
+    <Compile Include="Strings\PatternMatchingWithSuffixArray.cs" />
     <Compile Include="Strings\TrieMatching.cs" />
     <Compile Include="Strings\TrieMatchingExtended.cs" />
     <Compile Include="Strings\TrieTry.cs" />
