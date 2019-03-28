@@ -252,224 +252,75 @@ namespace Addition
             return OrderArr;
         }
 
+        public static int[] InvertArray(int[] ArrayToInvert )
+        {
+            var InvertedArray = new int[ArrayToInvert.Length];
 
-        public static char[] SuffixArrToBWTStr(int[] SuffixArray, char[] InputStr)
+            for( var i =0;i <ArrayToInvert.Length; i++)
+            {
+                InvertedArray[ArrayToInvert[i]] = i;
+            }
+
+            return InvertedArray;
+        }
+
+
+
+        public static int GetNextLCP(char[] InputStr, int a, int b, int KnownPrefixLength)
+        {
+            var wrdLng = InputStr.Length;
+
+            var count = (KnownPrefixLength > 0)? KnownPrefixLength : 0;
+            
+            while (a+count < wrdLng && b+count < wrdLng)
+            {
+                if (InputStr[a + count] == InputStr[b + count])
+                {
+                    count++;
+                }
+                else break;
+
+            }
+            return count;
+        }
+
+
+        public static int[] GetLCPArray(int[] SuffixArray, char[] InputStr)
         {
             var WrdLng = InputStr.Length;
 
-            var BWTString = new char[WrdLng];
+            var LCPArray = new int[WrdLng-1];
 
-            for(var i=0; i< WrdLng; i++)
+            var PosInOrder = InvertArray(SuffixArray);
+
+            var Suffix = PosInOrder[0];
+
+            var LeftIndex = 0;
+            var RightIndex = 1;
+            var currentLCP = GetNextLCP(InputStr, LeftIndex, RightIndex,0);
+
+            
+            for(var i =0; i< WrdLng; i++)
             {
-                var indexInStr = (SuffixArray[i] + WrdLng - 1) % WrdLng;
-                BWTString[i] = InputStr[indexInStr];
-            }
+                //LCPArray[i] = currentLCP;
+                //LeftIndex = SuffixArray[LeftIndex + 1];
+                //RightIndex = SuffixArray[RightIndex + 1];
+                //var nextLCP = GetNextLCP(InputStr, LeftIndex, RightIndex, currentLCP - 1);
 
-            return BWTString;
+                var OrderIndex = PosInOrder[Suffix];
+                if (OrderIndex == WrdLng - 1)
+                {
+                    currentLCP = 0;
+                    Suffix = (Suffix + 1) % WrdLng;
+                    continue;
+                }
+                var nextSuffix = SuffixArray[OrderIndex + 1];
+                currentLCP = GetNextLCP(InputStr, Suffix, nextSuffix, currentLCP - 1);
+                LCPArray[OrderIndex] = currentLCP;
+                Suffix = (Suffix + 1) % WrdLng;
+            }
+            return LCPArray;
         }
-
-        public static List<int> BWTMatching(char[] Word, char[][] Patterns, int[]SuffixArray)
-        {
-            //initalisse counting sort arrays
-            var AcountArray = new int[Word.Length];
-            var CcountArray = new int[Word.Length];
-            var GcountArray = new int[Word.Length];
-            var TcountArray = new int[Word.Length];
-
-            var AIndexArray = new List<int>();
-            var CIndexArray = new List<int>();
-            var GIndexArray = new List<int>();
-            var TIndexArray = new List<int>();
-
-            for (var i = 0; i < Word.Length; i++)
-            {
-                AcountArray[i] = -1;
-                CcountArray[i] = -1;
-                GcountArray[i] = -1;
-                TcountArray[i] = -1;
-            }
-
-            var ACount = 0;
-            var CCount = 0;
-            var GCount = 0;
-            var TCount = 0;
-
-            //perform counting sort
-            for (var i = 0; i < Word.Length; i++)
-            {
-                if (i > 0)
-                {
-                    AcountArray[i] = AcountArray[i - 1];
-                    CcountArray[i] = CcountArray[i - 1];
-                    GcountArray[i] = GcountArray[i - 1];
-                    TcountArray[i] = TcountArray[i - 1];
-                }
-
-                if (Word[i] == 'A')
-                {
-                    AcountArray[i]++;
-                    ACount++;
-                    AIndexArray.Add(i);
-                }
-                else if (Word[i] == 'C')
-                {
-                    CcountArray[i]++;
-                    CCount++;
-                    CIndexArray.Add(i);
-                }
-                else if (Word[i] == 'G')
-                {
-                    GcountArray[i]++;
-                    GCount++;
-                    GIndexArray.Add(i);
-                }
-                else if (Word[i] == 'T')
-                {
-                    TcountArray[i]++;
-                    TCount++;
-                    TIndexArray.Add(i);
-                }
-            }
-
-            var firstA = 1;
-            var firstC = firstA + ACount;
-            var firstG = firstC + CCount;
-            var firstT = firstG + GCount;
-
-            var setOfMatches = new HashSet<int>();
-
-            foreach (var Pattern in Patterns)
-            {
-                var currentLetter = Pattern[0];
-                var currentMin = 0;
-                int currentMax = Word.Length - 1;
-
-                var NoMatches = false;
-                if (Pattern.Length == 1)
-                {
-                    if (currentLetter == 'A')
-                        foreach (var index in AIndexArray)
-                            setOfMatches.Add(SuffixArray[index]-1);
-                    else if (currentLetter == 'C')
-                        foreach (var index in CIndexArray)
-                            setOfMatches.Add(SuffixArray[index]-1);
-                    else if (currentLetter == 'G')
-                        foreach (var index in GIndexArray)
-                            setOfMatches.Add(SuffixArray[index]-1);
-                    else if (currentLetter == 'T')
-                        foreach (var index in TIndexArray)
-                            setOfMatches.Add(SuffixArray[index]-1);
-                }
-                else
-                {
-
-
-
-                    for (var i = Pattern.Length - 1; i >= 0; i--)
-                    {
-                        var nextLetter = Pattern[i];
-                        if (nextLetter == 'A')
-                        {
-                            var FirstOccurance = -1;
-                            for (var j = currentMin; (j <= currentMax && FirstOccurance == -1); j++)
-                            {
-                                if (j == 0 && AcountArray[0] == 0) FirstOccurance = j;
-                                else if (j > 0 && AcountArray[j] > AcountArray[j - 1]) FirstOccurance = j;
-                            }
-                            if (FirstOccurance != -1)
-                            {
-                                var nextMin = AcountArray[FirstOccurance];
-                                if (nextMin == -1) nextMin = 0;
-                                currentMin = firstA + nextMin;
-                                currentMax = firstA + AcountArray[currentMax];
-                            }
-                            else
-                            {
-                                i = 0;
-                                NoMatches = true;
-                            }
-                        }
-                        else if (nextLetter == 'C')
-                        {
-                            var FirstOccurance = -1; ;
-                            for (var j = currentMin; (j <= currentMax && FirstOccurance == -1); j++)
-                            {
-                                if (j == 0 && CcountArray[0] == 0) FirstOccurance = j;
-                                else if (j > 0 && CcountArray[j] > CcountArray[j - 1]) FirstOccurance = j;
-                            }
-                            if (FirstOccurance != -1)
-                            {
-                                var nextMin = CcountArray[FirstOccurance];
-                                if (nextMin == -1) nextMin = 0;
-                                currentMin = firstC + nextMin;
-                                currentMax = firstC + CcountArray[currentMax];
-                            }
-                            else
-                            {
-                                i = 0;
-                                NoMatches = true;
-                            }
-                        }
-                        else if (nextLetter == 'G')
-                        {
-                            var FirstOccurance = -1;
-                            for (var j = currentMin; (j <= currentMax && FirstOccurance == -1); j++)
-                            {
-                                if (j == 0 && GcountArray[0] == 0) FirstOccurance = j;
-                                else if (j > 0 && GcountArray[j] > GcountArray[j - 1]) FirstOccurance = j;
-                            }
-                            if (FirstOccurance != -1)
-                            {
-                                var nextMin = GcountArray[FirstOccurance];
-                                if (nextMin == -1) nextMin = 0;
-                                currentMin = firstG + nextMin;
-                                currentMax = firstG + GcountArray[currentMax];
-                            }
-                            else
-                            {
-                                i = 0;
-                                NoMatches = true;
-                            }
-
-                        }
-                        else if (nextLetter == 'T')
-                        {
-                            var FirstOccurance = -1;
-                            for (var j = currentMin; (j <= currentMax && FirstOccurance == -1); j++)
-                            {
-                                if (j == 0 && TcountArray[0] == 0) FirstOccurance = j;
-                                else if (j > 0 && TcountArray[j] > TcountArray[j - 1]) FirstOccurance = j;
-                            }
-                            if (FirstOccurance != -1)
-                            {
-                                var nextMin = TcountArray[FirstOccurance];
-                                if (nextMin == -1) nextMin = 0;
-                                currentMin = firstT + nextMin;
-                                currentMax = firstT + TcountArray[currentMax];
-                            }
-                            else
-                            {
-                                i = 0;
-                                NoMatches = true;
-                            }
-                        }
-
-                        if (i == 0 && !NoMatches)
-                        {
-                            for(var k= currentMin; k<=currentMax; k++ )
-                            setOfMatches.Add(SuffixArray[k]);
-                        }
-                    }
-                }
-
-            }
-
-            return setOfMatches.ToList();
-
-
-        }
-
-
 
 
         static void Main(string[] args)
@@ -478,21 +329,12 @@ namespace Addition
 
             var SuffixArray = StrToSuffixArr(InputString);
 
-            var BWTString = SuffixArrToBWTStr(SuffixArray, InputString);
+            var LCPArray = GetLCPArray(SuffixArray, InputString);
 
-            var numberOfPatterns = Convert.ToInt32(Console.ReadLine());
-
-            var Patterns = new char[numberOfPatterns][];
-
-
-            var ArrayOfPattern = Console.ReadLine().Split(' ');
-            for(var i = 0; i< numberOfPatterns; i++)
+            foreach(var ord in LCPArray)
             {
-                Patterns[i] = ArrayOfPattern[i].ToCharArray();
+                Console.Write(ord + " ");
             }
-
-            var matches = BWTMatching(BWTString, Patterns, SuffixArray);
-            Console.WriteLine(string.Join(" ", matches));
         }  
     }
 }
