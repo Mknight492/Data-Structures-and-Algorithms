@@ -11,226 +11,111 @@ namespace Addition
 
     class Program
     {
-        public class Edge
+        public static bool solveDietProblem(decimal[][] GMat, int NoPivotRows)
         {
-            private long Capacity;
-
-            public int Start { get; set; }
-            public int End { get; set; }
-            public long Flow { get; set; }
-
-            public bool ResEdge { get; set; }
-
-            public Edge Corresponding { get; set; }
-
-            public Edge(int capacity, int start, int end)
+            var arrL = GMat[0].Length;
+            
+            // Write your code here
+            for (var i =0; i< GMat.Length; i++)
             {
-                Capacity = capacity;
-                End = end;
-                Start = start;
+                for (var j = 0; j < arrL - 1; j++)
+                {
+                    if(GMat[j][i] != 0)
+                    {
+                        return solveDietProblemRec(GMat, 0, j,i);
+                    }
+                }
             }
 
-            public long ResFlow()
-            {
-                return Capacity - Flow;
-            }
+
+            return false;
         }
 
-        public class Graph
+        public static bool solveDietProblemRec(decimal[][] GMat, int NoPivotRows, int curRow,int curCol)
         {
-            public List<Edge>[] Adj;
-            private int VCount;
+            var ValueToSolve = GMat[curRow][curCol];
+            var rowLeng = GMat[0].Length;
 
-            public Graph(int NumberVerticies)
+            //swap this row to highest position available i.e. just below number of pivot Rows
+            var temp = GMat[NoPivotRows];
+            GMat[NoPivotRows] = GMat[curRow];
+            GMat[curRow] = temp;
+
+            //make current row propotional to ValueToSolve 
+            for(var i =0; i < rowLeng; i++)
             {
-                VCount = NumberVerticies;
-                Adj = new List<Edge>[NumberVerticies];
-
-                for (var i = 0; i < NumberVerticies; i++)
-                    Adj[i] = new List<Edge>();
+                GMat[NoPivotRows][i] /= ValueToSolve;
             }
 
-            public void AddEdge(int Start, int End, int Capacity)
+
+            //also need shift rows which don't have a value for ValueToSolve to the bottom
+            var numberOfRowsWithoutVTS = 0;
+            for (var i =NoPivotRows+1; i <GMat.Length - numberOfRowsWithoutVTS; i++)
             {
-                var newEdge = new Edge(Capacity, Start, End);
-                newEdge.ResEdge = false;
-                Adj[Start].Add(newEdge);
-
-                var newResEdge = new Edge(Capacity, End, Start);
-                newResEdge.Flow = Capacity;
-                newResEdge.ResEdge = true;
-                Adj[End].Add(newResEdge);
-
-                newEdge.Corresponding = newResEdge;
-                newResEdge.Corresponding = newEdge;
-            }
-
-            private bool IncreaseFlow(int a, int b)
-            {
-                //array to keep track of which nodes have previously been visited
-                var visited = new bool[VCount];
-
-                //array which keeps track of the current shortest path for the corresponding vertex i
-                var prevEdgeArray = new Edge[VCount];
-
-                //array which keeps trach of the max flow through any given node
-                var MaxFlow = new long[VCount];
-                for (var i = 0; i < VCount; i++)
+                while(GMat[i][curCol] == 0 && i <GMat.Length - numberOfRowsWithoutVTS)
                 {
-                    MaxFlow[i] = long.MaxValue;
+                    temp = GMat[GMat.Length - numberOfRowsWithoutVTS -1];
+                    GMat[GMat.Length - numberOfRowsWithoutVTS-1] = GMat[i];
+                    GMat[i] = temp;
+                    numberOfRowsWithoutVTS++;
                 }
+            }
 
-                var currentMinFlow = long.MaxValue;
 
+            //for each row which contains a value of ValueToSolve
+            //make this ==0 and adjust all the other values acordingly
 
-                var NodesToProcess = new Queue<long>();
-
-                NodesToProcess.Enqueue(a);
-                visited[a] = true;
-                //MaxFlow[a] = 
-
-                while (NodesToProcess.Any())
+            for(var i= 0; i < GMat.Length- numberOfRowsWithoutVTS; i++)
+            {
+                if(i != NoPivotRows)
                 {
-                    var currentNode = NodesToProcess.Dequeue();
-                    var nextAccesableNodes = Adj[currentNode];
-
-                    foreach (var nextEdge in nextAccesableNodes)
+                    var FactorToChangeBy = GMat[i][curCol];
+                    for(var j =0; j< rowLeng; j++)
                     {
-                        var prevMaxFlow = MaxFlow[currentNode];
-                        var MaxFlowViaNode = nextEdge.ResFlow();
-
-                        if (!visited[nextEdge.End] && MaxFlowViaNode > 0)
-                        {
-                            //keep track of the shortest path to each node
-
-
-
-                            MaxFlow[nextEdge.End] = Math.Min(prevMaxFlow, MaxFlowViaNode);
-                            //at the final node aka the capital
-                            visited[nextEdge.End] = true;
-                            prevEdgeArray[nextEdge.End] = nextEdge;
-
-                            if (nextEdge.End == b)
-                            {
-
-                                var Current = nextEdge;
-
-                                while (Current != null)
-                                {
-                                    //need to increase flow in edge but also decrese flow in res network
-
-                                    Current.Flow += Math.Min(prevMaxFlow, MaxFlowViaNode);
-                                    Current.Corresponding.Flow -= Math.Min(prevMaxFlow, MaxFlowViaNode);
-
-                                    Current = prevEdgeArray[Current.Start];
-                                }
-
-
-                                return true;
-                            }
-                            NodesToProcess.Enqueue(nextEdge.End);
-
-
-                        }
+                        if(FactorToChangeBy != 0)
+                        GMat[i][j] -= (FactorToChangeBy * GMat[NoPivotRows][j]);
                     }
                 }
-
-                return false;
-
-
             }
 
-            public long FindMaxFlow()
+            //reverse i&&J in both formulas
+            for(var i = curCol +1; i < rowLeng-1; i++)
             {
-                while (IncreaseFlow(0, VCount - 1)) { };
-                long totalFlowOut = 0;
-
-                var EdgesOutOfSource = Adj[0];
-
-
-                foreach (var EdgeList in Adj)
+                for(var j = NoPivotRows + 1; j < GMat.Length; j++)
                 {
-                    foreach (var Edge in EdgeList)
-                    {
-                        if (!Edge.ResEdge && Edge.End == VCount - 1 && Edge.Start != VCount - 1)
-                            totalFlowOut += Edge.Flow;
-                    }
-
+                    if (GMat[j][i] != 0) {
+                        return solveDietProblemRec(GMat, NoPivotRows + 1, j, i);
+                        
+                    }    
                 }
-                return totalFlowOut;
             }
 
-
+            return false;
 
         }
 
         static void Main(string[] args)
         {
             var Input = Array.ConvertAll(Console.ReadLine().Split(' '), x => Convert.ToInt32(x));
-            var Noflights = Input[0];// number of flights
-            var NoCrew = Input[1]; //number of crew
+            var n = Input[0]; // number of dishes
+            var m = Input[0]; // number of ingredients
 
-
-            //make source node 0
-            //and crew nodes 1 -> NoCrew = crew
-            //and flight node Nocrew+1 -> NoCrew + NoFlights
-            //and sink = NoCrew + NoFlight +1
-            var GraphInst = new Graph(NoCrew + Noflights + 2); //+2 to include source and sink yo
-
-            for(var i=1; i<= NoCrew; i++)
+            var GauseeanMat = new decimal[n][];
+            for(var i =0; i < n; i++)
             {
-                GraphInst.AddEdge(0, i, 1); //add edge from source to each crew member
+                GauseeanMat[i] = Array.ConvertAll(Console.ReadLine().Split(' '), x => Convert.ToDecimal(x));
             }
 
-            for(var i= NoCrew+1; i <= NoCrew + Noflights; i++)
+            var uncess = solveDietProblem(GauseeanMat, 0);
+
+            for(var i =0; i<GauseeanMat.Length; i++)
             {
-                GraphInst.AddEdge(i, NoCrew + Noflights + 1, 1); //add edge from each flight to the sink
+                var Value = GauseeanMat[i][GauseeanMat[0].Length - 1];
+                Console.Write(String.Format("{0:0.000000}", Value) + " ");
             }
-           
-
-            //for earch crew member add edges to all the flights they can work.
-            for (var i = 1; i <= Noflights; i++)
-            {
-              
-
-                var EdgeValues = Array.ConvertAll(Console.ReadLine().Split(' '), x => Convert.ToInt32(x));
-                for(var j =1; j<= NoCrew; j++)
-                {
-                    if(EdgeValues[j-1] == 1)
-                    GraphInst.AddEdge(j, NoCrew +i, 1);
-                }
-                
-            }
-
-
-            GraphInst.FindMaxFlow();
-
-            for (var i =NoCrew+1;i<= NoCrew + Noflights; i++)
-            {
-                var AvailableCrew = false;
-                if (GraphInst.Adj[i].Any())
-                {
-                    var EdgesFromFlight = GraphInst.Adj[i];
-                    for(var j =0; j < EdgesFromFlight.Count; j++)
-                    {
-                        if(EdgesFromFlight[j].ResEdge && EdgesFromFlight[j].End <= NoCrew && EdgesFromFlight[j].Flow ==0)
-                        {
-                            AvailableCrew = true;
-                            Console.Write(GraphInst.Adj[i][j].End + " ");
-                        }
-                            
-                    }
-                }
-                    
-                if(!AvailableCrew)
-                    Console.Write("-1 ");
-            }
-
-
+            
         }
     }
 }
-
-
 
 

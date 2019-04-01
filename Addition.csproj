@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AdvancedAlgorithms\bipartiteGraphMaxFlow.cs" />
+    <Compile Include="AdvancedAlgorithms\GausseanElimination.cs" />
     <Compile Include="AdvancedAlgorithms\MaxFlow.cs" />
     <Compile Include="DataStructures\brackets.cs" />
     <Compile Include="DataStructures\ComputeTreeHeight.cs" />
