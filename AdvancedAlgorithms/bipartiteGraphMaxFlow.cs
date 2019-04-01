@@ -9,9 +9,9 @@ namespace Addition
 {
 
 
-    class FindMaxFlow
+    class BiPartiteMatching
     {
-       public class Edge
+        public class Edge
         {
             private long Capacity;
 
@@ -38,7 +38,7 @@ namespace Addition
 
         public class Graph
         {
-            private List<Edge>[] Adj;
+            public List<Edge>[] Adj;
             private int VCount;
 
             public Graph(int NumberVerticies)
@@ -157,31 +157,76 @@ namespace Addition
                     }
 
                 }
-
-
                 return totalFlowOut;
             }
 
 
-        }
 
+        }
 
         //static void Main(string[] args)
         //{
         //    var Input = Array.ConvertAll(Console.ReadLine().Split(' '), x => Convert.ToInt32(x));
-        //    var VCount = Input[0];
-        //    var ECount = Input[1];
+        //    var Noflights = Input[0];// number of flights
+        //    var NoCrew = Input[1]; //number of crew
 
-        //    var GraphInst = new Graph(VCount);
 
-        //    for (var i = 0; i < ECount; i++)
+        //    //make source node 0
+        //    //and crew nodes 1 -> NoCrew = crew
+        //    //and flight node Nocrew+1 -> NoCrew + NoFlights
+        //    //and sink = NoCrew + NoFlight +1
+        //    var GraphInst = new Graph(NoCrew + Noflights + 2); //+2 to include source and sink yo
+
+        //    for (var i = 1; i <= NoCrew; i++)
         //    {
-        //        var EdgeValues = Array.ConvertAll(Console.ReadLine().Split(' '), x => Convert.ToInt32(x));
-        //        GraphInst.AddEdge(EdgeValues[0] - 1, EdgeValues[1] - 1, EdgeValues[2]);
+        //        GraphInst.AddEdge(0, i, 1); //add edge from source to each crew member
+        //    }
+
+        //    for (var i = NoCrew + 1; i <= NoCrew + Noflights; i++)
+        //    {
+        //        GraphInst.AddEdge(i, NoCrew + Noflights + 1, 1); //add edge from each flight to the sink
         //    }
 
 
-        //    Console.WriteLine(GraphInst.FindMaxFlow());
+        //    //for earch crew member add edges to all the flights they can work.
+        //    for (var i = 1; i <= Noflights; i++)
+        //    {
+
+
+        //        var EdgeValues = Array.ConvertAll(Console.ReadLine().Split(' '), x => Convert.ToInt32(x));
+        //        for (var j = 1; j <= NoCrew; j++)
+        //        {
+        //            if (EdgeValues[j - 1] == 1)
+        //                GraphInst.AddEdge(j, NoCrew + i, 1);
+        //        }
+
+        //    }
+
+
+        //    GraphInst.FindMaxFlow();
+
+        //    for (var i = NoCrew + 1; i <= NoCrew + Noflights; i++)
+        //    {
+        //        var AvailableCrew = false;
+        //        if (GraphInst.Adj[i].Any())
+        //        {
+        //            var EdgesFromFlight = GraphInst.Adj[i];
+        //            for (var j = 0; j < EdgesFromFlight.Count; j++)
+        //            {
+        //                if (EdgesFromFlight[j].ResEdge && EdgesFromFlight[j].End <= NoCrew && EdgesFromFlight[j].Flow == 0)
+        //                {
+        //                    AvailableCrew = true;
+        //                    Console.Write(GraphInst.Adj[i][j].End + " ");
+        //                }
+
+        //            }
+        //        }
+
+        //        if (!AvailableCrew)
+        //            Console.Write("-1 ");
+        //    }
+
+
         //}
     }
 }
