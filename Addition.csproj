@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AdvancedAlgorithms\MaxFlow.cs" />
     <Compile Include="DataStructures\brackets.cs" />
     <Compile Include="DataStructures\ComputeTreeHeight.cs" />
     <Compile Include="DataStructures\ContemporaneousTraversal.cs" />
